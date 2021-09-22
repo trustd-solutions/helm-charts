@@ -1,3 +1,5 @@
+# https://helm.sh/docs/howto/chart_releaser_action/
+
 name: Release Charts
 
 on:
@@ -43,7 +45,9 @@ jobs:
 
       - name: Run chart-testing (install)
         run: ct install
+  
   release:
+    needs: lint-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
