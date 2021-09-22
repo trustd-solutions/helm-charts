@@ -13,7 +13,7 @@ trustd` to see the charts.
 
 To install the <chart-name> chart:
 
-    helm install my-<chart-name> <alias>/<chart-name>
+    helm install <chart-name> trustd/<chart-name>
 
 To uninstall the chart:
 
