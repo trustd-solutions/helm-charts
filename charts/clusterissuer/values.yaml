@@ -1,7 +1,7 @@
 ---
 issuers:
   - name: letsencrypt
-    email: 
+    email: ""
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt
