@@ -1,0 +1,67 @@
+{{if eq .Values.app.platform "se"}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Values.app.name}}
+  labels:
+    app: {{.Values.app.name}}
+spec:
+  serviceName: {{.Values.app.name}}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{.Values.app.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.app.name}}
+    spec:
+      containers:
+      - name: {{.Values.app.name}}
+        image: {{.Values.statefulset.container.image}}
+        imagePullPolicy: Always
+        ports:
+        - name: grpc
+          containerPort: 8124
+          protocol: TCP
+        - name: gui
+          containerPort: 8024
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: events
+          mountPath: /eventdata
+        readinessProbe:
+          httpGet:
+            path: {{.Values.statefulset.readiness.httpGet.path}}
+            port: {{.Values.statefulset.readiness.httpGet.port}}
+          initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
+          failureThreshold: {{.Values.statefulset.readiness.failureThreshold}}
+        livenessProbe:
+          httpGet:
+            path: {{.Values.statefulset.liveness.httpGet.path}}
+            port: {{.Values.statefulset.liveness.httpGet.port}}
+          initialDelaySeconds: {{.Values.statefulset.liveness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.liveness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.liveness.timeoutSeconds}}
+          successThreshold: {{.Values.statefulset.liveness.successThreshold}}
+          failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
+  volumeClaimTemplates:
+    - metadata:
+        name: events
+      spec:
+        accessModes: [ "{{.Values.volumeClaimTemplates.events.accessModes}}" ]
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.events.storage}}
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "{{.Values.volumeClaimTemplates.data.accessModes}}" ]
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.data.storage}}
+{{end}}

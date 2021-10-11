@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.app.name}}-gui-svc
+  labels:
+    app: {{.Values.app.name}}
+spec:
+  ports:
+  - name: gui
+    port: 8024
+    targetPort: 8024
+  sessionAffinity: ClientIP
+  selector:
+    app: {{.Values.app.name}}
+  type: ClusterIP
+  clusterIP: None
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.app.name}}-svc
+  labels:
+    app: {{.Values.app.name}}
+spec:
+  ports:
+  - name: grpc
+    port: 8124
+    targetPort: 8124
+  selector:
+    app: {{.Values.app.name}}
+  type: ClusterIP
+  clusterIP: None
+  
