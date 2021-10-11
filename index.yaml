@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/trustd-solutions/helm-charts/releases/download/axonserver-0.1.0/axonserver-0.1.0.tgz
     version: 0.1.0
+  clusterissuer:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2021-10-11T17:51:13.885984019Z"
+    description: A Helm chart to deploy cert-manager ClusterIssuers
+    digest: 03d0c4a719d8788728b39fcce29a86b3573c8436cf9560eb008ead1a091fee3f
+    name: clusterissuer
+    type: application
+    urls:
+    - https://github.com/trustd-solutions/helm-charts/releases/download/clusterissuer-0.1.0/clusterissuer-0.1.0.tgz
+    version: 0.1.0
   metabase:
   - apiVersion: v1
     appVersion: v0.36.3
@@ -26,4 +37,4 @@ entries:
     urls:
     - https://github.com/trustd-solutions/helm-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-11T16:30:03.169627898Z"
+generated: "2021-10-11T17:51:13.886022221Z"
