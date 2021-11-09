@@ -8,4 +8,4 @@ issuers:
     solvers:
     - http01:
         ingress:
-          class: ""
+          class: "nginx"
