@@ -13,8 +13,8 @@ issuers:
           class: "nginx"
   zerossl:
     enabled: false
-    keyId: ""
-    keySecret: ""
+    keyId: "keyId"
+    keySecret: "KeySecret"
   - name: zerossl
     server: https://acme.zerossl.com/v2/DV90
     privateKeySecretRef:
