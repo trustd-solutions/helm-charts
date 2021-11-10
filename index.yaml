@@ -13,6 +13,16 @@ entries:
     version: 0.1.0
   clusterissuer:
   - apiVersion: v2
+    appVersion: 0.3.0
+    created: "2021-11-10T15:56:04.566051452Z"
+    description: A Helm chart to deploy cert-manager ClusterIssuers
+    digest: fec62fa2964825c0b8e7dd4a3df0587cf7ba231479e842b8b1ef3f2619f567a9
+    name: clusterissuer
+    type: application
+    urls:
+    - https://github.com/trustd-solutions/helm-charts/releases/download/clusterissuer-0.3.0/clusterissuer-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 0.2.0
     created: "2021-11-09T19:05:24.075119497Z"
     description: A Helm chart to deploy cert-manager ClusterIssuers
@@ -57,4 +67,4 @@ entries:
     urls:
     - https://github.com/trustd-solutions/helm-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-09T19:05:24.075131897Z"
+generated: "2021-11-10T15:56:04.566066952Z"
