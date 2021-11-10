@@ -1,7 +1,7 @@
 ---
-issuers:
-  letsencrypt:
-    enabled: true
+letsencrypt:
+  enabled: true
+  issuers:
   - name: letsencrypt
     email: ""
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -11,10 +11,11 @@ issuers:
     - http01:
         ingress:
           class: "nginx"
-  zerossl:
-    enabled: false
-    keyId: "keyId"
-    keySecret: "KeySecret"
+zerossl:
+  enabled: false
+  keyId: ""
+  keySecret: ""
+  issuers:
   - name: zerossl
     server: https://acme.zerossl.com/v2/DV90
     privateKeySecretRef:

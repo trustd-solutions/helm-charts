@@ -1,5 +1,5 @@
-{{ if .Values.issuers.zerossl.enabled }}
-{{- range .Values.issuers.zerossl -}}
+{{ if .Values.zerossl.enabled }}
+{{- range .Values.zerossl.issuers -}}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
