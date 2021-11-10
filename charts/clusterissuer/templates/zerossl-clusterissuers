@@ -1,4 +1,5 @@
-{{- range .Values.issuers -}}
+{{ if .Values.issuers.zerossl.enabled }}
+{{- range .Values.issuers.zerossl -}}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -6,10 +7,16 @@ metadata:
   name: {{ .name }}
 spec:
   acme:
-    email: {{ .email }}
     server: {{ .server }}
     privateKeySecretRef:
       name: {{ .privateKeySecretRef.name }}
+    externalAccountBinding:
+      keyID: {{ $.Values.zerossl.keyId }}
+      keySecretRef:
+        name: zero-sll-eabsecret
+        key: secret
+      keyAlgorithm: HS256
     solvers:
       {{ .solvers | toYaml | indent 6 | trim }}
+{{- end -}}
 {{ end }}
