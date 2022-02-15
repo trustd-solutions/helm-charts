@@ -25,50 +25,49 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - name: grpc
-          containerPort: 8124
+          containerPort: {{ .Values.service.ports.grpc }}
           protocol: TCP
         - name: gui
-          containerPort: 8024
+          containerPort: {{ .Values.service.ports.gui }}
           protocol: TCP
         env:
         - name: AXONIQ_LICENSE
-          value: "/{{.Values.app.name}}/license/axoniq.license"
+          value: "{{ template "license.path" . }}/axoniq.license"
         volumeMounts:
         - name: data
-          mountPath: /{{.Values.app.name}}/data
+          mountPath: {{ template "data.path" . }}
         - name: events
-          mountPath: /{{.Values.app.name}}/events
+          mountPath: {{ template "events.path" . }}
         - name: log
-          mountPath: /{{.Values.app.name}}/log
+          mountPath: {{ template "log.path" . }}
         - name: config
-          mountPath: /{{.Values.app.name}}/config
+          mountPath: {{ template "config.path" . }}
           readOnly: true
         - name: cluster-template
-          mountPath: /{{.Values.app.name}}/config/cluster-template
-          readOnly: false
+          mountPath: {{ template "config.path" . }}/cluster-template
+          readOnly: true
         - name: system-token
-          mountPath: /{{.Values.app.name}}/security
+          mountPath: {{ template "systemToken.path" . }}
           readOnly: true
         - name: license
-          mountPath: /{{.Values.app.name}}/license
+          mountPath: {{ template "license.path" . }}
           readOnly: true
-        # readinessProbe:
-        #   httpGet:
-        #     path: {{.Values.statefulset.readiness.httpGet.path}}
-        #     port: {{.Values.statefulset.readiness.httpGet.port}}
-        #   initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
-        #   periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
-        #   timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
-        #   failureThreshold: {{.Values.statefulset.readiness.failureThreshold}}
-        # livenessProbe:
-        #   httpGet:
-        #     path: {{.Values.statefulset.liveness.httpGet.path}}
-        #     port: {{.Values.statefulset.liveness.httpGet.port}}
-        #   initialDelaySeconds: {{.Values.statefulset.liveness.initialDelaySeconds}}
-        #   periodSeconds: {{.Values.statefulset.liveness.periodSeconds}}
-        #   timeoutSeconds: {{.Values.statefulset.liveness.timeoutSeconds}}
-        #   successThreshold: {{.Values.statefulset.liveness.successThreshold}}
-        #   failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
+        readinessProbe:
+          exec:
+            tcpSocket:
+              port: {{ .Values.service.ports.gui }}
+          initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
+          failureThreshold: {{.Values.statefulset.readiness.failureThreshold}}
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.service.ports.gui }}
+          initialDelaySeconds: {{.Values.statefulset.liveness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.liveness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.liveness.timeoutSeconds}}
+          successThreshold: {{.Values.statefulset.liveness.successThreshold}}
+          failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
       volumes:
         - name: config
           secret:

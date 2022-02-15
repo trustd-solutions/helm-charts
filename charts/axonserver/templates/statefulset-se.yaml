@@ -22,10 +22,10 @@ spec:
         imagePullPolicy: Always
         ports:
         - name: grpc
-          containerPort: 8124
+          containerPort: {{ .Values.service.ports.grpc }}
           protocol: TCP
         - name: gui
-          containerPort: 8024
+          containerPort: {{ .Values.service.ports.gui }}
           protocol: TCP
         volumeMounts:
         - name: data
@@ -33,17 +33,16 @@ spec:
         - name: events
           mountPath: /eventdata
         readinessProbe:
-          httpGet:
-            path: {{.Values.statefulset.readiness.httpGet.path}}
-            port: {{.Values.statefulset.readiness.httpGet.port}}
+          exec:
+            tcpSocket:
+              port: {{ .Values.service.ports.gui }}
           initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
           periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
           timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
           failureThreshold: {{.Values.statefulset.readiness.failureThreshold}}
         livenessProbe:
-          httpGet:
-            path: {{.Values.statefulset.liveness.httpGet.path}}
-            port: {{.Values.statefulset.liveness.httpGet.port}}
+          tcpSocket:
+            port: {{ .Values.service.ports.gui }}
           initialDelaySeconds: {{.Values.statefulset.liveness.initialDelaySeconds}}
           periodSeconds: {{.Values.statefulset.liveness.periodSeconds}}
           timeoutSeconds: {{.Values.statefulset.liveness.timeoutSeconds}}

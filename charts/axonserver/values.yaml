@@ -1,6 +1,6 @@
 app:
   name: axonserver
-  platform: "ee"
+  platform: "se"
 
 statefulset:
   replicas: 3
@@ -9,14 +9,11 @@ statefulset:
     pullPolicy: Always
 
   readiness:
-    initialDelaySeconds: 5
+    initialDelaySeconds: 120
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 30
-    httpGet:
-      path: /actuator/info
-      port: 8024
 
   liveness:
     initialDelaySeconds: 5
@@ -24,37 +21,21 @@ statefulset:
     timeoutSeconds: 2
     successThreshold: 1
     failureThreshold: 3
-    httpGet:
-      path: /actuator/info
-      port: 8024 
 
 volumeClaimTemplates:
   events:
     accessModes: "ReadWriteOnce"
     storage: 5Gi
-  log:
-    accessModes: "ReadWriteOnce"
-    storage: 1Gi
   data:
     accessModes: "ReadWriteOnce"
     storage: 1Gi
 
-axoniq:
-  licenseBase64: ''
-  axonserver:
-    token: ''
-    propertiesBase64: ''
-    clusterTemplateBase64: ''
-    admin:
-      userName: 'admin'
-      password: ''
-    
+service:
+  ports:
+    grpc: "8124"
+    gui: "8024"
 
 ingress:
-  host: ''
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/affinity-mode: balanced
+  host: ""
+  annotations: {}
   tls_secret: axonserver-tls
