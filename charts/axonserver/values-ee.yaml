@@ -14,9 +14,8 @@ statefulset:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 30
-    httpGet:
-      path: /actuator/info
-      port: 8024
+    exec:
+      command: "java -jar axonserver-cli.jar contexts -t $(cat ./config/axonserver.token)"
 
   liveness:
     initialDelaySeconds: 5
@@ -24,9 +23,6 @@ statefulset:
     timeoutSeconds: 2
     successThreshold: 1
     failureThreshold: 3
-    httpGet:
-      path: /actuator/info
-      port: 8024 
 
 volumeClaimTemplates:
   events:
@@ -40,21 +36,25 @@ volumeClaimTemplates:
     storage: 1Gi
 
 axoniq:
-  licenseBase64: ''
+  licenseBase64: ""
   axonserver:
-    token: ''
-    propertiesBase64: ''
-    clusterTemplateBase64: ''
+    systemToken: ""
+    properties:
+      logging:
+        maxHistory: 10
+        maxSize: 10MB
+    propertiesBase64: ""
+    clusterTemplateBase64: ""
     admin:
-      userName: 'admin'
-      password: ''
+      userName: "admin"
+      password: ""
     
+service:
+  ports:
+    grpc: "8124"
+    gui: "8024"
 
 ingress:
-  host: ''
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/affinity-mode: balanced
+  host: ""
+  annotations: {}
   tls_secret: axonserver-tls
