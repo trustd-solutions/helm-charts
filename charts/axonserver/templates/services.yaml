@@ -8,8 +8,8 @@ metadata:
 spec:
   ports:
   - name: gui
-    port: 8024
-    targetPort: 8024
+    port: {{ .Values.service.ports.gui }}
+    targetPort: {{ .Values.service.ports.gui }}
   sessionAffinity: ClientIP
   selector:
     app: {{.Values.app.name}}
@@ -26,8 +26,8 @@ metadata:
 spec:
   ports:
   - name: grpc
-    port: 8124
-    targetPort: 8124
+    port: {{ .Values.service.ports.grpc }}
+    targetPort: {{ .Values.service.ports.grpc }}
   selector:
     app: {{.Values.app.name}}
   type: ClusterIP
