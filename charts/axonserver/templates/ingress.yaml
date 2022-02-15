@@ -5,7 +5,7 @@ metadata:
   name: {{.Values.app.name}}-ingress
 {{- if .Values.ingress.annotations }}
   annotations:
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+    {{ toYaml .Values.ingress.annotations | indent 4 }}
 {{- end }}
 spec:
   rules:
