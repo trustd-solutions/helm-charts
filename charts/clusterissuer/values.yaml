@@ -4,23 +4,16 @@ letsencrypt:
   issuers:
   - name: letsencrypt
     email: ""
-    server: https://acme-v02.api.letsencrypt.org/directory
-    privateKeySecretRef:
-      name: letsencrypt
-    solvers:
-    - http01:
-        ingress:
-          class: "nginx"
+  solvers:
+  - http01:
+      ingress:
+        class: "nginx"
+
 zerossl:
   enabled: false
   keyId: ""
   keySecret: ""
-  issuers:
-  - name: zerossl
-    server: https://acme.zerossl.com/v2/DV90
-    privateKeySecretRef:
-      name: zerossl
-    solvers:
-    - http01:
-        ingress:
-          class: "nginx"
+  solvers:
+  - http01:
+      ingress:
+        class: "nginx"

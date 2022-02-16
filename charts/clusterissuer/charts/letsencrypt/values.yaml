@@ -1,0 +1,12 @@
+---
+enabled: true
+issuers:
+- name: letsencrypt
+  server: https://acme-v02.api.letsencrypt.org/directory
+  email: ""
+  privateKeySecretRef:
+    name: letsencrypt
+  solvers: []
+#  - http01:
+#      ingress:
+#        class: nginx
