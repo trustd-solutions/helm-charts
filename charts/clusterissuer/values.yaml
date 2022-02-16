@@ -1,19 +1,8 @@
 ---
 letsencrypt:
   enabled: true
-  issuers:
-  - name: letsencrypt
-    email: ""
-  solvers:
-  - http01:
-      ingress:
-        class: "nginx"
 
 zerossl:
   enabled: false
   keyId: ""
   keySecret: ""
-  solvers:
-  - http01:
-      ingress:
-        class: "nginx"
