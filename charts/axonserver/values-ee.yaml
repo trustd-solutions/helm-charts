@@ -18,7 +18,7 @@ statefulset:
       command: "java -jar axonserver-cli.jar contexts -t $(cat ./config/axonserver.token)"
 
   liveness:
-    initialDelaySeconds: 5
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 2
     successThreshold: 1
