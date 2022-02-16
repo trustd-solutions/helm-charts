@@ -1,4 +1,3 @@
-{{if eq .Values.app.platform "ee"}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -6,8 +5,12 @@ metadata:
   labels:
     app: {{.Values.app.name}}
 spec:
-  serviceName: "{{.Values.app.name}}-svc"
+  serviceName: {{.Values.app.name}}-grpc
+  {{if eq .Values.app.platform "ee"}}
   replicas: {{.Values.statefulset.replicas}}
+  {{else}}
+  replicas: 1
+  {{end}}
   selector:
     matchLabels:
       app: {{.Values.app.name}}
@@ -30,16 +33,21 @@ spec:
         - name: gui
           containerPort: {{ .Values.service.ports.gui }}
           protocol: TCP
+        {{if eq .Values.app.platform "ee"}}
         env:
         - name: AXONIQ_LICENSE
           value: "{{ template "license.path" . }}/axoniq.license"
+        {{end}}
         volumeMounts:
-        - name: data
-          mountPath: {{ template "data.path" . }}
-        - name: events
-          mountPath: {{ template "events.path" . }}
         - name: log
           mountPath: {{ template "log.path" . }}
+        - name: data
+          mountPath: {{ template "data.path" . }}
+        - name: snapshots
+          mountPath: {{ template "snapshots.path" . }}
+        - name: events
+          mountPath: {{ template "events.path" . }}
+        {{if eq .Values.app.platform "ee"}}  
         - name: config
           mountPath: {{ template "config.path" . }}
           readOnly: true
@@ -52,6 +60,7 @@ spec:
         - name: license
           mountPath: {{ template "license.path" . }}
           readOnly: true
+        {{end}}
         readinessProbe:
           tcpSocket:
             port: {{ .Values.service.ports.gui }}
@@ -68,6 +77,9 @@ spec:
           successThreshold: {{.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
       volumes:
+        - name: log
+          emptyDir: {}
+        {{if eq .Values.app.platform "ee"}}  
         - name: config
           secret:
             secretName: axonserver-properties
@@ -80,26 +92,29 @@ spec:
         - name: license
           secret:
             secretName: axonserver-license
+        {{end}}
   volumeClaimTemplates:
     - metadata:
         name: events
       spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.events.accessModes}}" ]
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
     - metadata:
-        name: log
-      spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.log.accessModes}}" ]
-        resources:
-          requests:
-            storage: {{.Values.volumeClaimTemplates.log.storage}}
-    - metadata:
         name: data
       spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.data.accessModes}}" ]
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
-{{end}}
+    - metadata:
+        name: snapshots
+      spec:
+        accessModes: 
+          {{ toYaml .Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }}
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
