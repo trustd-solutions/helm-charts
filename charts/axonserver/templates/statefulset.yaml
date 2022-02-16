@@ -41,14 +41,16 @@ spec:
           value: "{{ template "license.path" . }}/axoniq.license"
         {{end}}
         volumeMounts:
+        - name: pid
+          mountPath: {{ template "pid.path" . }}
+        - name: log
+          mountPath: {{ template "log.path" . }}
         - name: data
           mountPath: {{ template "data.path" . }}
         - name: snapshots
           mountPath: {{ template "snapshots.path" . }}
         - name: events
           mountPath: {{ template "events.path" . }}
-        - name: log
-          mountPath: {{ template "log.path" . }}
         {{if eq .Values.app.platform "ee"}}  
         - name: config
           mountPath: {{ template "config.path" . }}
@@ -79,6 +81,8 @@ spec:
           successThreshold: {{.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
       volumes:
+        - name: pid
+          emptyDir: {}
         - name: log
           emptyDir: {}
         {{if eq .Values.app.platform "ee"}}  
@@ -99,21 +103,24 @@ spec:
     - metadata:
         name: events
       spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.events.accessModes}}" ]
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | indent 10 }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
     - metadata:
         name: data
       spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.data.accessModes}}" ]
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.data.accessModes | indent 10 }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
     - metadata:
         name: snapshots
       spec:
-        accessModes: [ "{{.Values.volumeClaimTemplates.snapshots.accessModes}}" ]
+        accessModes: 
+          {{ toYaml .Values.volumeClaimTemplates.snapshots.accessModes | indent 10 }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}

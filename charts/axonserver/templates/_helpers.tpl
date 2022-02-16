@@ -2,44 +2,47 @@
 printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 12}}
 {{- end -}}
 
-{{- define "data.path" -}}
-{{- "/{{.Values.app.name}}/data" -}}
-{{- end -}}
-
-{{- define "snapshots.path" -}}
-{{- "/{{.Values.app.name}}/snapshots" -}}
-{{- end -}}
-
-{{- define "events.path" -}}
-{{- "/{{.Values.app.name}}/events" -}}
+{{- define "pid.path" -}}
+{{- "./pid" -}}
 {{- end -}}
 
 {{- define "log.path" -}}
-{{- "/{{.Values.app.name}}/log" -}}
+{{- "./log" -}}
+{{- end -}}
+
+{{- define "data.path" -}}
+{{- "./data" -}}
+{{- end -}}
+
+{{- define "snapshots.path" -}}
+{{- "./snapshots" -}}
+{{- end -}}
+
+{{- define "events.path" -}}
+{{- "./events" -}}
 {{- end -}}
 
 {{- define "config.path" -}}
-{{- "/{{.Values.app.name}}/config" -}}
+{{- "./config" -}}
 {{- end -}}
 
 {{- define "systemToken.path" -}}
-{{- "/{{.Values.app.name}}/security" -}}
+{{- "./security" -}}
 {{- end -}}
 
 {{- define "license.path" -}}
-{{- "/{{.Values.app.name}}/license" -}}
+{{- "./license" -}}
 {{- end -}}
 
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
-
 axoniq.axonserver.event.storage={{ template "events.path" . }}
 axoniq.axonserver.snapshot.storage={{ template "snapshots.path" . }}
 axoniq.axonserver.replication.log-storage-folder={{ template "log.path" . }}
 axoniq.axonserver.controldb-path={{ template "data.path" . }}
-axoniq.axonserver.pid-file-location=/{{.Values.app.name}}
+axoniq.axonserver.pid-file-location={{ template "pid.path" . }}
 
-logging.file={{ template "log.path" . }}/{{.Values.app.name}}.log
+logging.file={{ template "log.path" . }}/axonserver.log
 logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHistory | default "10"}}
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
 

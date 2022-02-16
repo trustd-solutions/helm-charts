@@ -26,13 +26,19 @@ statefulset:
 
 volumeClaimTemplates:
   events:
-    accessModes: "ReadWriteOnce"
+    accessModes: 
+    - ReadWriteOnce
+    - ReadOnlyMany
     storage: 5Gi
   data:
-    accessModes: "ReadWriteOnce"
+    accessModes:
+    - ReadWriteOnce
+    - ReadOnlyMany
     storage: 1Gi
   snapshots:
-    accessModes: "ReadWriteOnce"
+    accessModes:
+    - ReadWriteOnce
+    - ReadOnlyMany
     storage: 5Gi
 
 # This section is optional and it applies to the axonserver-ee only. 
