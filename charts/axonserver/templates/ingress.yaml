@@ -12,9 +12,11 @@ spec:
   - host: {{.Values.ingress.host}}
     http:
       paths:
-      - backend:
+      - path: /
+        backend:
           serviceName: {{.Values.app.name}}-gui-svc
           servicePort: gui
+
   tls:
   - hosts:
     - {{ .Values.ingress.host }}
