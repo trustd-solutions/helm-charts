@@ -3,5 +3,15 @@ apiVersion: v2
 name: clusterissuer
 description: A Helm chart to deploy cert-manager ClusterIssuers
 type: application
-version: 0.3.0
-appVersion: 0.3.0
+version: 0.4.0
+#appVersion:
+dependencies:
+- name: letsencrypt
+  version: "0.1.0"
+  #repository: "file://./charts/letsencrypt"
+  condition: letsencrypt.enabled
+
+- name: zerossl
+  version: "0.1.0"
+  #repository: "file://./charts/zerossl"
+  condition: zerossl.enabled
