@@ -32,21 +32,21 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
-axoniq.axonserver.event.storage={{ template "events.path" . }}
-axoniq.axonserver.snapshot.storage={{ template "snapshots.path" . }}
-axoniq.axonserver.replication.log-storage-folder={{ template "log.path" . }}
-axoniq.axonserver.controldb-path={{ template "data.path" . }}
-axoniq.axonserver.pid-file-location={{ template "data.path" . }}
+axoniq.axonserver.event.storage={{ include "events.path" . }}
+axoniq.axonserver.snapshot.storage={{ include "snapshots.path" . }}
+axoniq.axonserver.replication.log-storage-folder={{ include "log.path" . }}
+axoniq.axonserver.controldb-path={{ include "data.path" . }}
+axoniq.axonserver.pid-file-location={{ include "data.path" . }}
 
-logging.file={{ template "log.path" . }}/axonserver.log
+logging.file={{ include "log.path" . }}/axonserver.log
 logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHistory | default "10"}}
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
 
-axoniq.axonserver.clustertemplate.path={{ template "config.path" . }}/cluster-template.yaml
+axoniq.axonserver.clustertemplate.path={{ include "config.path" . }}/cluster-template.yaml
 axoniq.axonserver.domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.internal-domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.accesscontrol.enabled=true
-axoniq.axonserver.accesscontrol.systemtokenfile={{ template "systemToken.path" . }}/axoniq.token
+axoniq.axonserver.accesscontrol.systemtokenfile={{ include "systemToken.path" . }}/axoniq.token
 axoniq.axonserver.port={{.Values.service.ports.grpc}}
 axoniq.axonserver.server.port={{.Values.service.ports.gui}}
 # axoniq.axonserver.internal-port=8224
