@@ -38,7 +38,7 @@ volumeClaimTemplates:
 axoniq:
   licenseBase64: ""
   axonserver:
-    token: ""
+    systemToken: ""
     properties:
       logging:
         maxHistory: 10
