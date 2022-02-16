@@ -53,9 +53,8 @@ spec:
           mountPath: {{ template "license.path" . }}
           readOnly: true
         readinessProbe:
-          exec:
-            tcpSocket:
-              port: {{ .Values.service.ports.gui }}
+          tcpSocket:
+            port: {{ .Values.service.ports.gui }}
           initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
           periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
           timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
