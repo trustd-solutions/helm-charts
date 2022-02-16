@@ -56,9 +56,5 @@ service:
 
 ingress:
   host: ""
-  annotations:
-    cert-manager.io/cluster-issuer: ""
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/affinity-mode: balanced
+  annotations: {}
   tls_secret: axonserver-tls
