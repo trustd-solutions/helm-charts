@@ -1,0 +1,13 @@
+---
+enabled: false
+keyId: ""
+keySecret: ""
+issuers:
+- name: zerossl
+  server: https://acme.zerossl.com/v2/DV90
+  privateKeySecretRef:
+    name: zerossl
+  solvers:
+  - http01:
+      ingress:
+        class: nginx
