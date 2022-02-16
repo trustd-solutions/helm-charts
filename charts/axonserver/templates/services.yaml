@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{.Values.app.name}}-gui-svc
+  name: {{.Values.app.name}}-gui
   labels:
     app: {{.Values.app.name}}
 spec:
@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{.Values.app.name}}-svc
+  name: {{.Values.app.name}}-grpc
   labels:
     app: {{.Values.app.name}}
 spec:
