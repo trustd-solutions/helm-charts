@@ -2,10 +2,6 @@
 printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 12}}
 {{- end -}}
 
-{{- define "pid.path" -}}
-{{- "./pid" -}}
-{{- end -}}
-
 {{- define "log.path" -}}
 {{- "./log" -}}
 {{- end -}}
@@ -40,7 +36,7 @@ axoniq.axonserver.event.storage={{ template "events.path" . }}
 axoniq.axonserver.snapshot.storage={{ template "snapshots.path" . }}
 axoniq.axonserver.replication.log-storage-folder={{ template "log.path" . }}
 axoniq.axonserver.controldb-path={{ template "data.path" . }}
-axoniq.axonserver.pid-file-location={{ template "pid.path" . }}
+axoniq.axonserver.pid-file-location={{ template "data.path" . }}
 
 logging.file={{ template "log.path" . }}/axonserver.log
 logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHistory | default "10"}}
