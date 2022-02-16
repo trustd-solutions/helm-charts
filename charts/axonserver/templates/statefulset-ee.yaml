@@ -54,8 +54,8 @@ spec:
           readOnly: true
         readinessProbe:
           exec:
-            command:
-            - {{.Values.statefulset.readiness.exec.command}}
+            tcpSocket:
+              port: {{ .Values.service.ports.gui }}
           initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
           periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
           timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}

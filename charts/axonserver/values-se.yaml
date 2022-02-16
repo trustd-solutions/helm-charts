@@ -9,14 +9,12 @@ statefulset:
     pullPolicy: Always
 
   readiness:
-    initialDelaySeconds: 30
+    initialDelaySeconds: 120
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 30
-    exec:
-      command: "java -jar axonserver-cli.jar contexts -t $(cat ./config/axonserver.token)"
-
+    
   liveness:
     initialDelaySeconds: 5
     periodSeconds: 10
