@@ -23,6 +23,24 @@ entries:
     version: 0.1.0
   clusterissuer:
   - apiVersion: v2
+    created: "2022-02-16T14:24:43.264616698Z"
+    dependencies:
+    - condition: letsencrypt.enabled
+      name: letsencrypt
+      repository: ""
+      version: 0.1.0
+    - condition: zerossl.enabled
+      name: zerossl
+      repository: ""
+      version: 0.1.0
+    description: A Helm chart to deploy cert-manager ClusterIssuers
+    digest: e3190a0608101bc614e6bfb17415525403bab4262f2b1695eeccc937a8d227fd
+    name: clusterissuer
+    type: application
+    urls:
+    - https://github.com/trustd-solutions/helm-charts/releases/download/clusterissuer-0.4.0/clusterissuer-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 0.3.0
     created: "2021-11-10T15:56:04.566051452Z"
     description: A Helm chart to deploy cert-manager ClusterIssuers
@@ -77,4 +95,4 @@ entries:
     urls:
     - https://github.com/trustd-solutions/helm-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-15T21:32:53.622403378Z"
+generated: "2022-02-16T14:24:43.264646693Z"
