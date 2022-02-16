@@ -32,6 +32,7 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
+
 axoniq.axonserver.event.storage={{ template "events.path" . }}
 axoniq.axonserver.snapshot.storage={{ template "snapshots.path" . }}
 axoniq.axonserver.replication.log-storage-folder={{ template "log.path" . }}
