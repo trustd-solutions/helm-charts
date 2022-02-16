@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{.Values.app.name}}-ingress
+  name: {{.Values.app.name}}
   annotations:
   {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -14,7 +14,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{.Values.app.name}}-gui-svc
+          serviceName: {{.Values.app.name}}-gui
           servicePort: gui
 
   tls:

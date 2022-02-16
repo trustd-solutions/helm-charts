@@ -3,6 +3,8 @@ app:
   platform: "se"
 
 statefulset:
+# The 'replicas' value applies to the axonserver-ee only.
+# For the axonserver-se platform is set to "replicas: 1" 
   replicas: 3
   container:
     image: "axoniq/axonserver"
@@ -16,7 +18,7 @@ statefulset:
     failureThreshold: 30
 
   liveness:
-    initialDelaySeconds: 5
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 2
     successThreshold: 1
@@ -24,12 +26,36 @@ statefulset:
 
 volumeClaimTemplates:
   events:
-    accessModes: "ReadWriteOnce"
+    accessModes: 
+    - ReadWriteOnce
+    - ReadOnlyMany
     storage: 5Gi
   data:
-    accessModes: "ReadWriteOnce"
+    accessModes:
+    - ReadWriteOnce
+    - ReadOnlyMany
     storage: 1Gi
+  snapshots:
+    accessModes:
+    - ReadWriteOnce
+    - ReadOnlyMany
+    storage: 5Gi
 
+# This section is optional and it applies to the axonserver-ee only. 
+axoniq:
+  licenseBase64: ""
+  axonserver:
+    systemToken: ""
+    properties:
+      logging:
+        maxHistory: 10
+        maxSize: 10MB
+    propertiesBase64: ""
+    clusterTemplateBase64: ""
+    admin:
+      userName: "admin"
+      password: ""
+    
 service:
   ports:
     grpc: "8124"
