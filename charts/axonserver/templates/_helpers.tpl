@@ -6,6 +6,10 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 {{- "/{{.Values.app.name}}/data" -}}
 {{- end -}}
 
+{{- define "snapshots.path" -}}
+{{- "/{{.Values.app.name}}/snapshots" -}}
+{{- end -}}
+
 {{- define "events.path" -}}
 {{- "/{{.Values.app.name}}/events" -}}
 {{- end -}}
@@ -29,7 +33,7 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
 axoniq.{{.Values.app.name}}.event.storage={{ template "events.path" . }}
-axoniq.{{.Values.app.name}}.snapshot.storage={{ template "data.path" . }}
+axoniq.{{.Values.app.name}}.snapshot.storage={{ template "snapshots.path" . }}
 axoniq.{{.Values.app.name}}.replication.log-storage-folder={{ template "log.path" . }}
 axoniq.{{.Values.app.name}}.controldb-path={{ template "data.path" . }}
 axoniq.{{.Values.app.name}}.pid-file-location={{ template "data.path" . }}

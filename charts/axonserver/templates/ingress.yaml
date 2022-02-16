@@ -14,7 +14,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{.Values.app.name}}-gui-svc
+          serviceName: {{.Values.app.name}}-gui
           servicePort: gui
 
   tls:
