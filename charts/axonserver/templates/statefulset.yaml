@@ -36,29 +36,33 @@ spec:
         {{if eq .Values.app.platform "ee"}}
         env:
         - name: AXONIQ_LICENSE
-          value: "{{ template "license.path" . }}/axoniq.license"
+          value: "{{ include "license.path" . }}/axoniq.license"
         {{end}}
         volumeMounts:
         - name: log
-          mountPath: {{ template "log.path" . }}
+          mountPath: {{ include "log.path" . }}
         - name: data
-          mountPath: {{ template "data.path" . }}
+          mountPath: {{ include "data.path" . }}
         - name: snapshots
-          mountPath: {{ template "snapshots.path" . }}
+          mountPath: {{ include "snapshots.path" . }}
         - name: events
-          mountPath: {{ template "events.path" . }}
+          mountPath: {{ include "events.path" . }}
         {{if eq .Values.app.platform "ee"}}  
-        - name: config
-          mountPath: {{ template "config.path" . }}
+        - name: properties
+          mountPath: {{ include "config.path" . }}/axonserver.properties
+          subPath: axonserver.properties
           readOnly: true
         - name: cluster-template
-          mountPath: {{ template "config.path" . }}/cluster-template
+          mountPath: {{ include "config.path" . }}/cluster-template.yaml
+          subPath: cluster-template.yaml
           readOnly: true
         - name: system-token
-          mountPath: {{ template "systemToken.path" . }}
+          mountPath: {{ include "systemToken.path" . }}/axoniq.token
+          subPath: axoniq.token
           readOnly: true
         - name: license
-          mountPath: {{ template "license.path" . }}
+          mountPath: {{ include "license.path" . }}/axoniq.license
+          subPath: axoniq.license
           readOnly: true
         {{end}}
         readinessProbe:
@@ -80,7 +84,7 @@ spec:
         - name: log
           emptyDir: {}
         {{if eq .Values.app.platform "ee"}}  
-        - name: config
+        - name: properties
           secret:
             secretName: axonserver-properties
         - name: cluster-template
@@ -88,7 +92,7 @@ spec:
             secretName: axonserver-cluster-template
         - name: system-token
           secret:
-            secretName: axonserver-token
+            secretName: axonserver-system-token
         - name: license
           secret:
             secretName: axonserver-license
