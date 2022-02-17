@@ -15,8 +15,8 @@ logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHist
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
 
 axoniq.axonserver.clustertemplate.path={{.Values.statefulset.container.workdir }}/config/cluster-template.yaml
-axoniq.axonserver.domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
-axoniq.axonserver.internal-domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
+axoniq.axonserver.domain={{.Values.app.name}}-grpc.{{ .Release.Namespace }}.svc.cluster.local
+axoniq.axonserver.internal-domain={{.Values.app.name}}-grpc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.accesscontrol.enabled=true
 axoniq.axonserver.accesscontrol.systemtokenfile={{.Values.statefulset.container.workdir }}/security/axoniq.token
 axoniq.axonserver.port={{.Values.service.ports.grpc}}
