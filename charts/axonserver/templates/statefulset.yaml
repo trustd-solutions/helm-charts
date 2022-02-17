@@ -48,17 +48,21 @@ spec:
         - name: events
           mountPath: {{ include "events.path" . }}
         {{if eq .Values.app.platform "ee"}}  
-        - name: config
-          mountPath: {{ include "config.path" . }}
+        - name: properties
+          mountPath: {{ include "config.path" . }}/axonserver.properties
+          subPath: axonserver.properties
           readOnly: true
         - name: cluster-template
-          mountPath: {{ include "config.path" . }}/cluster-template
+          mountPath: {{ include "config.path" . }}/cluster-template.yaml
+          subPath: cluster-template.yaml
           readOnly: true
         - name: system-token
-          mountPath: {{ include "systemToken.path" . }}
+          mountPath: {{ include "systemToken.path" . }}/axoniq.token
+          subPath: axoniq.token
           readOnly: true
         - name: license
-          mountPath: {{ include "license.path" . }}
+          mountPath: {{ include "license.path" . }}/axoniq.license
+          subPath: axoniq.license
           readOnly: true
         {{end}}
         readinessProbe:
@@ -80,7 +84,7 @@ spec:
         - name: log
           emptyDir: {}
         {{if eq .Values.app.platform "ee"}}  
-        - name: config
+        - name: properties
           secret:
             secretName: axonserver-properties
         - name: cluster-template
@@ -88,7 +92,7 @@ spec:
             secretName: axonserver-cluster-template
         - name: system-token
           secret:
-            secretName: axonserver-token
+            secretName: axonserver-system-token
         - name: license
           secret:
             secretName: axonserver-license
