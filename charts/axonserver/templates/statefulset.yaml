@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{.Values.app.name}}
 spec:
-  serviceName: {{.Values.app.name}}-grpc
+  serviceName: {{.Values.app.name}}-svc
   {{if eq .Values.app.platform "ee"}}
   replicas: {{.Values.statefulset.replicas}}
   {{else}}

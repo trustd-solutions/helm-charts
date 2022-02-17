@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{.Values.app.name}}-grpc
+  name: {{.Values.app.name}}-svc
   labels:
     app: {{.Values.app.name}}
 spec:
