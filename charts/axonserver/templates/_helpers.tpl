@@ -4,6 +4,7 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
+axoniq.axonserver.devmode.enabled={{ .Values.axoniq.axonserver.devmode.enabled }}
 axoniq.axonserver.event.storage={{.Values.statefulset.container.workdir }}/events
 axoniq.axonserver.snapshot.storage={{.Values.statefulset.container.workdir }}/snapshots
 axoniq.axonserver.replication.log-storage-folder={{.Values.statefulset.container.workdir }}/log
