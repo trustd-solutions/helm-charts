@@ -40,6 +40,11 @@ axoniq:
         - context: _admin
           roles:
           - ADMIN
+        - context: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
+          roles:
+          - CONTEXT_ADMIN
+          - USE_CONTEXT
+          - ADMIN
         password: '{{.Values.axoniq.axonserver.admin.password}}'
         userName: '{{.Values.axoniq.axonserver.admin.userName}}'
 
