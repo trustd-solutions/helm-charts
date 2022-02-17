@@ -3,31 +3,31 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 {{- end -}}
 
 {{- define "log.path" -}}
-{{- "./log" -}}
+{{- "/axonserver/log" -}}
 {{- end -}}
 
 {{- define "data.path" -}}
-{{- "./data" -}}
+{{- "/axonserver/data" -}}
 {{- end -}}
 
 {{- define "snapshots.path" -}}
-{{- "./snapshots" -}}
+{{- "/axonserver/snapshots" -}}
 {{- end -}}
 
 {{- define "events.path" -}}
-{{- "./events" -}}
+{{- "/axonserver/events" -}}
 {{- end -}}
 
 {{- define "config.path" -}}
-{{- "./config" -}}
+{{- "/axonserver/config" -}}
 {{- end -}}
 
 {{- define "systemToken.path" -}}
-{{- "./security" -}}
+{{- "/axonserver/security" -}}
 {{- end -}}
 
 {{- define "license.path" -}}
-{{- "./license" -}}
+{{- "/axonserver/license" -}}
 {{- end -}}
 
 {{/* Expand 'axonserver.properties' */}}
