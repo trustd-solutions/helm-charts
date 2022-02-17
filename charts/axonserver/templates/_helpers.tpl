@@ -60,7 +60,11 @@ axoniq:
         - role: PRIMARY
           node: {{$.Values.app.name}}-{{ . }}
 {{- end }}
-        name: default
-        contexts: []
+        name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
+        contexts:
+        - name: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
+          metaData:
+            event.index-format: JUMP_SKIP_INDEX
+            snapshot.index-format: JUMP_SKIP_INDEX
         applications: []
 {{- end -}}

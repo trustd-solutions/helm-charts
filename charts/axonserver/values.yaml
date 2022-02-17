@@ -39,20 +39,22 @@ volumeClaimTemplates:
     - ReadWriteOnce
     storage: 5Gi
 
-# This section is optional and it applies to the axonserver-ee only. 
 axoniq:
-  licenseBase64: ""
   axonserver:
-    systemToken: ""
+    # The licenseBase64 value is optional and it applies to the axonserver-ee only. 
+    licenseBase64: ""
+    admin:
+      userName: "admin"
+      password: ""
+    defaultContextName: default
+    defaultReplicationGroupName: default
     properties:
       logging:
         maxHistory: 10
         maxSize: 10MB
+    systemToken: ""
     propertiesBase64: ""
     clusterTemplateBase64: ""
-    admin:
-      userName: "admin"
-      password: ""
     
 service:
   ports:
