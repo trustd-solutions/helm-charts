@@ -7,7 +7,8 @@ statefulset:
 # For the axonserver-se platform is set to "replicas: 1" 
   replicas: 3
   container:
-    image: "axoniq/axonserver"
+    image: axoniq/axonserver
+    workdir: /axonserver
     pullPolicy: Always
 
   readiness:
@@ -28,17 +29,14 @@ volumeClaimTemplates:
   events:
     accessModes: 
     - ReadWriteOnce
-    - ReadOnlyMany
     storage: 5Gi
   data:
     accessModes:
     - ReadWriteOnce
-    - ReadOnlyMany
     storage: 1Gi
   snapshots:
     accessModes:
     - ReadWriteOnce
-    - ReadOnlyMany
     storage: 5Gi
 
 # This section is optional and it applies to the axonserver-ee only. 
