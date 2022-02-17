@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "4.4"
 description: A Helm chart for running the Axon Server(https://docs.axoniq.io/reference-guide/axon-server/installation/docker-k8s) on Kubernetes
 name: axonserver
-version: 0.3.3
+version: 0.3.4
