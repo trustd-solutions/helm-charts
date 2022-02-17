@@ -43,6 +43,8 @@ volumeClaimTemplates:
 
 axoniq:
   axonserver:
+    devmode:
+      enabled: false
     # The licenseBase64 value is optional and it applies to the axonserver-ee only. 
     licenseBase64: ""
     admin:
