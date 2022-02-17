@@ -10,7 +10,9 @@ statefulset:
     image: axoniq/axonserver
     workdir: /axonserver
     pullPolicy: Always
-
+  
+  env: []
+  
   readiness:
     initialDelaySeconds: 120
     periodSeconds: 5

@@ -34,7 +34,11 @@ spec:
           containerPort: {{ .Values.service.ports.gui }}
           protocol: TCP
         {{if eq .Values.app.platform "ee"}}
-        env:
+        env: 
+        {{- range .Values.statefulset.env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
         - name: AXONIQ_LICENSE
           value: {{.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
