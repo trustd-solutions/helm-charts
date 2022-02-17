@@ -2,51 +2,23 @@
 printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 4 }} {{ randAlphaNum 12}}
 {{- end -}}
 
-{{- define "log.path" -}}
-printf "%s/log"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "data.path" -}}
-printf "%s/data"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "snapshots.path" -}}
-printf "%s/snapshots"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "events.path" -}}
-printf "%s/events"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "config.path" -}}
-printf "%s/config"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "systemToken.path" -}}
-printf "%s/security"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
-{{- define "license.path" -}}
-printf "%s/license"  {{.Values.statefulset.container.workdir }}
-{{- end -}}
-
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
-axoniq.axonserver.event.storage={{ include "events.path" . }}
-axoniq.axonserver.snapshot.storage={{ include "snapshots.path" . }}
-axoniq.axonserver.replication.log-storage-folder={{ include "log.path" . }}
-axoniq.axonserver.controldb-path={{ include "data.path" . }}
-axoniq.axonserver.pid-file-location={{ include "data.path" . }}
+axoniq.axonserver.event.storage={{.Values.statefulset.container.workdir }}/events
+axoniq.axonserver.snapshot.storage={{.Values.statefulset.container.workdir }}/snapshots
+axoniq.axonserver.replication.log-storage-folder={{.Values.statefulset.container.workdir }}/log
+axoniq.axonserver.controldb-path={{.Values.statefulset.container.workdir }}/data
+axoniq.axonserver.pid-file-location={{.Values.statefulset.container.workdir }}/data
 
-logging.file={{ include "log.path" . }}/axonserver.log
+logging.file={{.Values.statefulset.container.workdir }}/log/axonserver.log
 logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHistory | default "10"}}
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
 
-axoniq.axonserver.clustertemplate.path={{ include "config.path" . }}/cluster-template.yaml
+axoniq.axonserver.clustertemplate.path={{.Values.statefulset.container.workdir }}/config/cluster-template.yaml
 axoniq.axonserver.domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.internal-domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.accesscontrol.enabled=true
-axoniq.axonserver.accesscontrol.systemtokenfile={{ include "systemToken.path" . }}/axoniq.token
+axoniq.axonserver.accesscontrol.systemtokenfile={{.Values.statefulset.container.workdir }}/security/axoniq.token
 axoniq.axonserver.port={{.Values.service.ports.grpc}}
 axoniq.axonserver.server.port={{.Values.service.ports.gui}}
 # axoniq.axonserver.internal-port=8224
