@@ -36,32 +36,32 @@ spec:
         {{if eq .Values.app.platform "ee"}}
         env:
         - name: AXONIQ_LICENSE
-          value: "{{ include "license.path" . }}/axoniq.license"
+          value: {{.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
         - name: log
-          mountPath: {{ include "log.path" . }}
+          mountPath: {{.Values.statefulset.container.workdir }}/log
         - name: data
-          mountPath: {{ include "data.path" . }}
+          mountPath: {{.Values.statefulset.container.workdir }}/data
         - name: snapshots
-          mountPath: {{ include "snapshots.path" . }}
+          mountPath: {{.Values.statefulset.container.workdir }}/snapshots
         - name: events
-          mountPath: {{ include "events.path" . }}
+          mountPath: {{.Values.statefulset.container.workdir }}/events
         {{if eq .Values.app.platform "ee"}}  
         - name: properties
-          mountPath: {{ include "config.path" . }}/axonserver.properties
+          mountPath: {{.Values.statefulset.container.workdir }}/config/axonserver.properties
           subPath: axonserver.properties
           readOnly: true
         - name: cluster-template
-          mountPath: {{ include "config.path" . }}/cluster-template.yaml
+          mountPath: {{.Values.statefulset.container.workdir }}/config/cluster-template.yaml
           subPath: cluster-template.yaml
           readOnly: true
         - name: system-token
-          mountPath: {{ include "systemToken.path" . }}/axoniq.token
+          mountPath: {{.Values.statefulset.container.workdir }}/security/axoniq.token
           subPath: axoniq.token
           readOnly: true
         - name: license
-          mountPath: {{ include "license.path" . }}/axoniq.license
+          mountPath: {{.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
         {{end}}
