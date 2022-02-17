@@ -3,31 +3,31 @@ printf "%s-%s-%s-%s-%s" {{randAlphaNum 8 }} {{ randAlphaNum 4 }} {{ randAlphaNum
 {{- end -}}
 
 {{- define "log.path" -}}
-{{- "./log" -}}
+printf "%s/log"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "data.path" -}}
-{{- "./data" -}}
+printf "%s/data"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "snapshots.path" -}}
-{{- "./snapshots" -}}
+printf "%s/snapshots"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "events.path" -}}
-{{- "./events" -}}
+printf "%s/events"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "config.path" -}}
-{{- "./config" -}}
+printf "%s/config"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "systemToken.path" -}}
-{{- "./security" -}}
+printf "%s/security"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{- define "license.path" -}}
-{{- "./license" -}}
+printf "%s/license"  {{.Values.container.workdir }}
 {{- end -}}
 
 {{/* Expand 'axonserver.properties' */}}
