@@ -3,6 +3,7 @@ app:
   platform: "ee"
 
 statefulset:
+  podManagementPolicy: Parallel
 # The 'replicas' value applies to the axonserver-ee only.
 # For the axonserver-se platform is set to "replicas: 1" 
   replicas: 3
@@ -14,11 +15,11 @@ statefulset:
   env: []
   
   readiness:
-    initialDelaySeconds: 120
+    initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
-    failureThreshold: 30
+    failureThreshold: 12
 
   liveness:
     initialDelaySeconds: 30
