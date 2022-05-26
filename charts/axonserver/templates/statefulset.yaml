@@ -19,6 +19,7 @@ spec:
       labels:
         app: {{.Values.app.name}}
     spec:
+      podManagementPolicy: {{.Values.statefulset.podManagementPolicy}}
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
