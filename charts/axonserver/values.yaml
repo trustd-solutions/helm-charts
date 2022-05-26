@@ -15,11 +15,11 @@ statefulset:
   env: []
   
   readiness:
-    initialDelaySeconds: 120
+    initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
-    failureThreshold: 30
+    failureThreshold: 12
 
   liveness:
     initialDelaySeconds: 30
