@@ -5,10 +5,7 @@ metadata:
   labels:
     app: {{.Values.app.name}}
 spec:
-<<<<<<< HEAD
-  #podManagementPolicy: {{.Values.statefulset.podManagementPolicy}}
-=======
->>>>>>> axonserver
+  podManagementPolicy: {{.Values.statefulset.podManagementPolicy}}
   serviceName: {{.Values.app.name}}-svc
   {{if eq .Values.app.platform "ee"}}
   replicas: {{.Values.statefulset.replicas}}

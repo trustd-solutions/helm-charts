@@ -3,6 +3,7 @@ app:
   platform: "ee"
 
 statefulset:
+  podManagementPolicy: Parallel
 # The 'replicas' value applies to the axonserver-ee only.
 # For the axonserver-se platform is set to "replicas: 1" 
   replicas: 3
