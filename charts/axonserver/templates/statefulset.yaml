@@ -107,10 +107,8 @@ spec:
         name: events
       spec:
         accessModes:
-          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}
-        {{ if eq .Values.volumeClaimTemplates.storageClassName "" }}  
-        storageClassName: {{ .Values.volumeClaimTemplates.storaClassName  }}
-        {{ end }}
+          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
@@ -119,9 +117,7 @@ spec:
       spec:
         accessModes:
           {{ toYaml .Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
-        {{ if eq .Values.volumeClaimTemplates.storageClassName "" }}  
-        storageClassName: {{ .Values.volumeClaimTemplates.storaClassName  }}
-        {{ end }}
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
@@ -129,10 +125,8 @@ spec:
         name: snapshots
       spec:
         accessModes: 
-          {{ toYaml .Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }}
-        {{ if eq .Values.volumeClaimTemplates.storageClassName "" }}  
-        storageClassName: {{ .Values.volumeClaimTemplates.storaClassName  }}
-        {{ end }}
+          {{ toYaml .Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }} 
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
