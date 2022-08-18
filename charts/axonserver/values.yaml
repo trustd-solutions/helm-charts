@@ -4,16 +4,16 @@ app:
 
 statefulset:
   podManagementPolicy: Parallel
-# The 'replicas' value applies to the axonserver-ee only.
-# For the axonserver-se platform is set to "replicas: 1" 
+  # The 'replicas' value applies to the axonserver-ee only.
+  # For the axonserver-se platform is set to "replicas: 1"
   replicas: 3
   container:
     image: axoniq/axonserver
     workdir: /axonserver
     pullPolicy: Always
-  
+
   env: []
-  
+
   readiness:
     initialDelaySeconds: 5
     periodSeconds: 5
@@ -31,23 +31,23 @@ statefulset:
 volumeClaimTemplates:
   storageClassName: ""
   events:
-    accessModes: 
-    - ReadWriteOnce
+    accessModes:
+      - ReadWriteOnce
     storage: 5Gi
   data:
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     storage: 1Gi
   snapshots:
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     storage: 5Gi
 
 axoniq:
   axonserver:
     devmode:
       enabled: false
-    # The licenseBase64 value is optional and it applies to the axonserver-ee only. 
+    # The licenseBase64 value is optional and it applies to the axonserver-ee only.
     licenseBase64: ""
     admin:
       userName: "admin"
@@ -61,13 +61,14 @@ axoniq:
     systemToken: ""
     propertiesBase64: ""
     clusterTemplateBase64: ""
-    
+
 service:
   ports:
     grpc: "8124"
     gui: "8024"
 
 ingress:
+  enabled: false
   host: ""
   annotations: {}
   tls_secret: axonserver-tls
