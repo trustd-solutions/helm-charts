@@ -1,18 +1,27 @@
 app:
   name: axonserver
+# platform: "ee" | "se"  
   platform: "ee"
 
 statefulset:
   podManagementPolicy: Parallel
   # The 'replicas' value applies to the axonserver-ee only.
-  # For the axonserver-se platform is set to "replicas: 1"
+  # For the axonserver-se platform "replicas: 1"
   replicas: 3
   container:
-    image: axoniq/axonserver
+    image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
     workdir: /axonserver
     pullPolicy: Always
 
   env: []
+
+resources:
+  limits:
+    cpu: ""
+    memory: ""
+  requests:
+    cpu: 250m
+    memory: 500Mi
 
   readiness:
     initialDelaySeconds: 5
@@ -30,15 +39,28 @@ statefulset:
 
 volumeClaimTemplates:
   storageClassName: ""
-  events:
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
   data:
+    enabled: true
     accessModes:
       - ReadWriteOnce
     storage: 1Gi
+  events:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    storage: 5Gi
+  exts:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storage: 5Gi
+  plugins:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storage: 5Gi
   snapshots:
+    enabled: true
     accessModes:
       - ReadWriteOnce
     storage: 5Gi
@@ -46,6 +68,7 @@ volumeClaimTemplates:
 axoniq:
   axonserver:
     devmode:
+    # devmode is only applicable if .Values.app.plaform: se
       enabled: false
     # The licenseBase64 value is optional and it applies to the axonserver-ee only.
     licenseBase64: ""
