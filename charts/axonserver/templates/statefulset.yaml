@@ -27,12 +27,19 @@ spec:
       - name: {{.Values.app.name}}
         image: {{.Values.statefulset.container.image}}
         imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: {{.Values.resources.limits.cpu}}
+            memory: {{.Values.resources.limits.memory}}
+          requests:
+            cpu: {{.Values.resources.requests.cpu}}
+            memory: {{.Values.resources.requests.cpu}}
         ports:
         - name: grpc
-          containerPort: {{ .Values.service.ports.grpc }}
+          containerPort: {{.Values.service.ports.grpc}}
           protocol: TCP
         - name: gui
-          containerPort: {{ .Values.service.ports.gui }}
+          containerPort: {{.Values.service.ports.gui}}
           protocol: TCP
         {{if eq .Values.app.platform "ee"}}
         env: 
@@ -46,12 +53,22 @@ spec:
         volumeMounts:
         - name: log
           mountPath: {{.Values.statefulset.container.workdir }}/log
+        
         - name: data
           mountPath: {{.Values.statefulset.container.workdir }}/data
-        - name: snapshots
-          mountPath: {{.Values.statefulset.container.workdir }}/snapshots
+
         - name: events
           mountPath: {{.Values.statefulset.container.workdir }}/events
+
+        - name: exts
+          mountPath: {{.Values.statefulset.container.workdir }}/exts
+
+        - name: plugins
+          mountPath: {{.Values.statefulset.container.workdir }}/plugins
+
+        - name: snapshots
+          mountPath: {{.Values.statefulset.container.workdir }}/snapshots
+
         {{if eq .Values.app.platform "ee"}}  
         - name: properties
           mountPath: {{.Values.statefulset.container.workdir }}/config/axonserver.properties
@@ -70,6 +87,7 @@ spec:
           subPath: axoniq.license
           readOnly: true
         {{end}}
+
         readinessProbe:
           tcpSocket:
             port: {{ .Values.service.ports.gui }}
@@ -88,6 +106,32 @@ spec:
       volumes:
         - name: log
           emptyDir: {}
+        
+        {{ if ne .Values.volumeClaimTemplates.data.enabled true }}
+        - name: data
+          emptyDir: {}
+        {{ end }}
+
+        {{ if ne .Values.volumeClaimTemplates.events.enabled true }}
+        - name: events
+          emptyDir: {}
+        {{ end }}
+
+        {{ if ne .Values.volumeClaimTemplates.exts.enabled true }}
+        - name: exts
+          emptyDir: {}
+        {{ end }}
+
+        {{ if ne .Values.volumeClaimTemplates.plugins.enabled true }}
+        - name: plugins
+          emptyDir: {}
+        {{ end }}
+
+        {{ if ne .Values.volumeClaimTemplates.snapshots.enabled true }}
+        - name: snapshots
+          emptyDir: {}
+        {{ end }}
+              
         {{if eq .Values.app.platform "ee"}}  
         - name: properties
           secret:
@@ -103,15 +147,7 @@ spec:
             secretName: axonserver-license
         {{end}}
   volumeClaimTemplates:
-    - metadata:
-        name: events
-      spec:
-        accessModes:
-          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
-        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{.Values.volumeClaimTemplates.events.storage}}
+    {{ if eq .Values.volumeClaimTemplates.data true }}
     - metadata:
         name: data
       spec:
@@ -121,6 +157,45 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
+    {{ end }}
+
+    {{ if eq .Values.volumeClaimTemplates.events true }}
+    - metadata:
+        name: events
+      spec:
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.events.storage}}
+    {{ end }}
+    
+    {{ if eq .Values.volumeClaimTemplates.exts true }}
+    - metadata:
+        name: exts
+      spec:
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.exts.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.exts.storage}}
+    {{ end }}
+    
+    {{ if eq .Values.volumeClaimTemplates.plugins true }}
+    - metadata:
+        name: plugins
+      spec:
+        accessModes:
+          {{ toYaml .Values.volumeClaimTemplates.plugins.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+        resources:
+          requests:
+            storage: {{.Values.volumeClaimTemplates.plugins.storage}}
+    {{ end }}
+
+    {{ if eq .Values.volumeClaimTemplates.snapshots true }}
     - metadata:
         name: snapshots
       spec:
@@ -130,3 +205,4 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
+    {{ end }}
