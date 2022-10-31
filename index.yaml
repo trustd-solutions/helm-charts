@@ -1,6 +1,16 @@
 apiVersion: v1
 entries:
   axonserver:
+  - apiVersion: v2
+    appVersion: 4.6.5-jdk-11-dev
+    created: "2022-10-31T22:52:35.529514151Z"
+    description: A Helm chart for running the Axon Server(https://docs.axoniq.io/reference-guide/axon-server/installation/docker-k8s)
+      on Kubernetes
+    digest: 78e9b1987cd1f1d115ce2230ccb5147d2df05d5dd63cba7e8fc6c76c6426d86f
+    name: axonserver
+    urls:
+    - https://github.com/trustd-solutions/helm-charts/releases/download/axonserver-0.4.0/axonserver-0.4.0.tgz
+    version: 0.4.0
   - apiVersion: v1
     appVersion: "4.4"
     created: "2022-08-18T14:50:26.260276792Z"
@@ -194,4 +204,4 @@ entries:
     urls:
     - https://github.com/trustd-solutions/helm-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-18T14:50:26.260499902Z"
+generated: "2022-10-31T22:52:35.529606752Z"
