@@ -1,4 +1,4 @@
-{{ if eq .Values.ingress.enabled "true" }}
+{{- if eq .Values.ingress.enabled "true" -}}
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -22,4 +22,4 @@ spec:
   - hosts:
     - {{ .Values.ingress.host }}
     secretName: {{.Values.ingress.tls_secret}}
-{{ end }}
+{{- end -}}
