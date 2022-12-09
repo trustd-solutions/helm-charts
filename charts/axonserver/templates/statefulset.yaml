@@ -106,28 +106,28 @@ spec:
       volumes:
         - name: log
           emptyDir: {}
-        
-        {{ if ne .Values.volumeClaimTemplates.data true }}
+  
+        {{ if ne .Values.volumeClaimTemplates.data.enabled true }}
         - name: data
           emptyDir: {}
         {{ end }}
 
-        {{ if ne .Values.volumeClaimTemplates.events true }}
+        {{ if ne .Values.volumeClaimTemplates.events.enabled true }}
         - name: events
           emptyDir: {}
         {{ end }}
 
-        {{ if ne .Values.volumeClaimTemplates.exts true }}
+        {{ if ne .Values.volumeClaimTemplates.exts.enabled true }}
         - name: exts
           emptyDir: {}
         {{ end }}
 
-        {{ if ne .Values.volumeClaimTemplates.plugins true }}
+        {{ if ne .Values.volumeClaimTemplates.plugins.enabled true }}
         - name: plugins
           emptyDir: {}
         {{ end }}
 
-        {{ if ne .Values.volumeClaimTemplates.snapshots true }}
+        {{ if ne .Values.volumeClaimTemplates.snapshots.enabled true }}
         - name: snapshots
           emptyDir: {}
         {{ end }}

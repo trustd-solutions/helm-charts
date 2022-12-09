@@ -20,7 +20,7 @@ statefulset:
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
-    failureThreshold: 12
+    failureThreshold: 12  
 
   liveness:
     initialDelaySeconds: 30
