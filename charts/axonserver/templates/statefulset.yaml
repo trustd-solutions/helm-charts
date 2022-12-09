@@ -106,7 +106,7 @@ spec:
       volumes:
         - name: log
           emptyDir: {}
-        
+
         {{ if .Values.volumeClaimTemplates.data.enabled }}
         - name: data
           emptyDir: {}
@@ -170,7 +170,7 @@ spec:
           requests:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
     {{ end }}
-    
+
     {{ if .Values.volumeClaimTemplates.exts.enabled }}
     - metadata:
         name: exts
