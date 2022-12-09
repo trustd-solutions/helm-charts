@@ -106,7 +106,7 @@ spec:
       volumes:
         - name: log
           emptyDir: {}
-          
+
         {{ if .Values.volumeClaimTemplates.data.enabled }}
         - name: data
           emptyDir: {}
