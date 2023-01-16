@@ -9,7 +9,7 @@ spec:
   - ReadWriteOnce
   awsElasticBlockStore:
     fsType: ext4
-    {{- with (index $.Values.volumeClaimTemplates.data.volumeIds {{ . }}) }}
+    {{- with (index $.Values.volumeClaimTemplates.data.volumeIds . ) }}
     volumeID: {{ . }} 
     {{- end}}
   persistentVolumeReclaimPolicy: Retain
@@ -27,7 +27,7 @@ spec:
   - ReadWriteOnce
   awsElasticBlockStore:
     fsType: ext4
-    {{- with (index $.Values.volumeClaimTemplates.events.volumeIds {{ . }}) }}
+    {{- with (index $.Values.volumeClaimTemplates.events.volumeIds . ) }}
     volumeID: {{ . }} 
     {{- end}}
   persistentVolumeReclaimPolicy: Retain
@@ -45,7 +45,7 @@ spec:
   - ReadWriteOnce
   awsElasticBlockStore:
     fsType: ext4
-    {{- with (index $.Values.volumeClaimTemplates.exts.volumeIds {{ . }}) }}
+    {{- with (index $.Values.volumeClaimTemplates.exts.volumeIds . ) }}
     volumeID: {{ . }} 
     {{- end}}
   persistentVolumeReclaimPolicy: Retain
@@ -63,7 +63,7 @@ spec:
   - ReadWriteOnce
   awsElasticBlockStore:
     fsType: ext4
-    {{- with (index $.Values.volumeClaimTemplates.plugins.volumeIds {{ . }}) }}
+    {{- with (index $.Values.volumeClaimTemplates.plugins.volumeIds . ) }}
     volumeID: {{ . }} 
     {{- end}}
   persistentVolumeReclaimPolicy: Retain
@@ -81,7 +81,7 @@ spec:
   - ReadWriteOnce
   awsElasticBlockStore:
     fsType: ext4
-    {{- with (index $.Values.volumeClaimTemplates.snapshots.volumeIds {{ . }}) }}
+    {{- with (index $.Values.volumeClaimTemplates.snapshots.volumeIds . ) }}
     volumeID: {{ . }} 
     {{- end}}
   persistentVolumeReclaimPolicy: Retain
