@@ -23,6 +23,12 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
+      {{ if .Values.nodeSelectorPerPod }}
+      {{- range .Values.nodeSelectorPerPod }}
+      nodeSelector:
+        {{ . }}
+      {{- end }}
+      {{ end }}
       containers:
       - name: {{.Values.app.name}}
         image: {{.Values.statefulset.container.image}}
@@ -106,32 +112,33 @@ spec:
       volumes:
         - name: log
           emptyDir: {}
-
-        {{if not .Values.volumeClaimTemplates.data.enabled }}
+    
         - name: data
+          {{ if not .Values.volumeClaimTemplates.data.enabled }}
           emptyDir: {}
-        {{ end }}
+          {{ end }}
 
-        {{ if not .Values.volumeClaimTemplates.events.enabled }}
         - name: events
+          {{ if not .Values.volumeClaimTemplates.events.enabled }}
           emptyDir: {}
-        {{ end }}
+          {{ end }}
 
-        {{ if not .Values.volumeClaimTemplates.exts.enabled }}
         - name: exts
+          {{ if not .Values.volumeClaimTemplates.exts.enabled }}
           emptyDir: {}
-        {{ end }}
+          {{ end }}
 
-        {{ if not .Values.volumeClaimTemplates.plugins.enabled }}
         - name: plugins
+          {{ if not .Values.volumeClaimTemplates.plugins.enabled }}
           emptyDir: {}
-        {{ end }}
+          {{ end }}
 
-        {{ if not .Values.volumeClaimTemplates.snapshots.enabled }}
         - name: snapshots
+          {{ if not .Values.volumeClaimTemplates.snapshots.enabled }}
           emptyDir: {}
-        {{ end }}
-              
+          {{ end }}
+
+
         {{if eq .Values.app.platform "ee"}}  
         - name: properties
           secret:
@@ -146,80 +153,69 @@ spec:
           secret:
             secretName: axonserver-license
         {{end}}
-  {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+
   volumeClaimTemplates:
-    {{ if $.Values.volumeClaimTemplates.data.enabled }}
+    {{ if .Values.volumeClaimTemplates.data.enabled }}
     - metadata:
+        namespace: {{ .Release.Namespace }}
         name: data
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml .Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
-            storage: {{$.Values.volumeClaimTemplates.data.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        volumeName: data-axonserver-{{ . }}  
-        {{ end }}
+            storage: {{ .Values.volumeClaimTemplates.data.storage }}
     {{ end }}
 
-    {{ if $.Values.volumeClaimTemplates.events.enabled }}
+    {{ if .Values.volumeClaimTemplates.events.enabled }}
     - metadata:
+        namespace: {{ .Release.Namespace }}
         name: events
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml .Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
-            storage: {{$.Values.volumeClaimTemplates.events.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.events.volumeIds) }}
-        volumeName: events-axonserver-{{ . }}  
-        {{ end }}
+            storage: {{.Values.volumeClaimTemplates.events.storage}}
     {{ end }}
 
-    {{ if $.Values.volumeClaimTemplates.exts.enabled }}
+    {{ if .Values.volumeClaimTemplates.exts.enabled }}
     - metadata:
+        namespace: {{ .Release.Namespace }}
         name: exts
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.exts.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml .Values.volumeClaimTemplates.exts.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
-            storage: {{$.Values.volumeClaimTemplates.exts.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.exts.volumeIds) }}
-        volumeName: exts-axonserver-{{ . }}  
-        {{ end }}
+            storage: {{.Values.volumeClaimTemplates.exts.storage}}
     {{ end }}
     
-    {{ if $.Values.volumeClaimTemplates.plugins.enabled }}
+    {{ if .Values.volumeClaimTemplates.plugins.enabled }}
     - metadata:
+        namespace: {{ .Release.Namespace }}
         name: plugins
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.plugins.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml .Values.volumeClaimTemplates.plugins.accessModes | nindent 10 }}  
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
-            storage: {{$.Values.volumeClaimTemplates.plugins.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.plugins.volumeIds) }}
-        volumeName: plugins-axonserver-{{ . }}  
-        {{ end }}
+            storage: {{.Values.volumeClaimTemplates.plugins.storage}}
     {{ end }}
 
-    {{ if $.Values.volumeClaimTemplates.snapshots.enabled }}
+    {{ if .Values.volumeClaimTemplates.snapshots.enabled }}
     - metadata:
+        namespace: {{ .Release.Namespace }}
         name: snapshots
       spec:
         accessModes: 
-          {{ toYaml $.Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }} 
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml .Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }} 
+        storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
         resources:
           requests:
-            storage: {{$.Values.volumeClaimTemplates.snapshots.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.snapshots.volumeIds) }}
-        volumeName: snapshots-axonserver-{{ . }}  
-        {{ end }}
+            storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
     {{ end }}
-    {{- end }}
