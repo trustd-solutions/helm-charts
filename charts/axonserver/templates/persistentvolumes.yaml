@@ -1,0 +1,79 @@
+{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{ if and (.Values.volumeClaimTemplates.data.enabled) (.Values.volumeClaimTemplates.data.volumeIds)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-axonserver-{{ . }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: {{ .Values.volumeClaimTemplates.data.volumeIds[{{ . }}] }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+{{- end }}
+
+{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{ if and (.Values.volumeClaimTemplates.events.enabled) (.Values.volumeClaimTemplates.events.volumeIds)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: events-axonserver-{{ . }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: {{ .Values.volumeClaimTemplates.events.volumeIds[{{ . }}] }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+{{- end }}
+
+{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{ if and (.Values.volumeClaimTemplates.exts.enabled) (.Values.volumeClaimTemplates.exts.volumeIds)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: exts-axonserver-{{ . }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: {{ .Values.volumeClaimTemplates.exts.volumeIds[{{ . }}] }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+{{- end }}
+
+{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{ if and (.Values.volumeClaimTemplates.plugins.enabled) (.Values.volumeClaimTemplates.plugins.volumeIds)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plugins-axonserver-{{ . }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: {{ .Values.volumeClaimTemplates.plugins.volumeIds[{{ . }}] }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+{{- end }}
+
+{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{ if and (.Values.volumeClaimTemplates.snapshots.enabled) (.Values.volumeClaimTemplates.snapshots.volumeIds)}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: snapshots-axonserver-{{ . }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: {{ .Values.volumeClaimTemplates.snapshots.volumeIds[{{ . }}] }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.volumeClaimTemplates.storageClassName  }}
+{{- end }}
