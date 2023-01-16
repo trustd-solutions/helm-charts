@@ -173,7 +173,7 @@ spec:
         resources:
           requests:
             storage: {{$.Values.volumeClaimTemplates.events.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.events.volumeIds) }}
         volumeName: events-axonserver-{{ . }}  
         {{ end }}
     {{ end }}
@@ -188,7 +188,7 @@ spec:
         resources:
           requests:
             storage: {{$.Values.volumeClaimTemplates.exts.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.exts.volumeIds) }}
         volumeName: exts-axonserver-{{ . }}  
         {{ end }}
     {{ end }}
@@ -203,7 +203,7 @@ spec:
         resources:
           requests:
             storage: {{$.Values.volumeClaimTemplates.plugins.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.plugins.volumeIds) }}
         volumeName: plugins-axonserver-{{ . }}  
         {{ end }}
     {{ end }}
@@ -218,7 +218,7 @@ spec:
         resources:
           requests:
             storage: {{$.Values.volumeClaimTemplates.snapshots.storage}}
-        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.snapshots.volumeIds) }}
         volumeName: snapshots-axonserver-{{ . }}  
         {{ end }}
     {{ end }}
