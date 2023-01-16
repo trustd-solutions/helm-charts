@@ -157,6 +157,13 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
+        {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        selector:
+          matchLabels:
+            identifier: data-axonserver-{{ . }}  
+        {{ end }}
+        {{- end }}
     {{ end }}
 
     {{ if .Values.volumeClaimTemplates.events.enabled }}
@@ -169,6 +176,13 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
+        {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        selector:
+          matchLabels:
+            identifier: events-axonserver-{{ . }}  
+        {{ end }}
+        {{- end }}
     {{ end }}
 
     {{ if .Values.volumeClaimTemplates.exts.enabled }}
@@ -181,6 +195,13 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.exts.storage}}
+        {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        selector:
+          matchLabels:
+            identifier: exts-axonserver-{{ . }}  
+        {{ end }}
+        {{- end }}
     {{ end }}
     
     {{ if .Values.volumeClaimTemplates.plugins.enabled }}
@@ -193,6 +214,13 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.plugins.storage}}
+        {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        selector:
+          matchLabels:
+            identifier: plugins-axonserver-{{ . }}  
+        {{ end }}
+        {{- end }}
     {{ end }}
 
     {{ if .Values.volumeClaimTemplates.snapshots.enabled }}
@@ -205,4 +233,11 @@ spec:
         resources:
           requests:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
+        {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+        {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        selector:
+          matchLabels:
+            identifier: snapshots-axonserver-{{ . }}  
+        {{ end }}
+        {{- end }}
     {{ end }}

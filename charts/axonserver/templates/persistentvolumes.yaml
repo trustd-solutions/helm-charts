@@ -6,6 +6,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: data-axonserver-{{ . }}
+  labels:
+    identifier: data-axonserver-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -28,6 +30,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: events-axonserver-{{ . }}
+  labels:
+    identifier: events-axonserver-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -50,6 +54,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: exts-axonserver-{{ . }}
+  labels:
+    identifier: exts-axonserver-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -72,6 +78,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: plugins-axonserver-{{ . }}
+  labels:
+    identifier: plugins-axonserver-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -94,6 +102,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: snapshots-axonserver-{{ . }}
+  labels:
+    identifier: snapshots-axonserver-{{ . }}
 spec:
   accessModes:
   - ReadWriteOnce
