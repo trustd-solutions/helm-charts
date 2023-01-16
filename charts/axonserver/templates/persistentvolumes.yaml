@@ -9,13 +9,13 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  capacity:
+    storage: {{ $.Values.volumeClaimTemplates.data.storage }}
   awsElasticBlockStore:
     fsType: ext4
     {{- with index $.Values.volumeClaimTemplates.data.volumeIds . }}
     volumeID: {{ . }} 
     {{- end }}
-    capacity:
-      storage: {{ $.Values.volumeClaimTemplates.data.storage }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
 {{ end }}
@@ -29,13 +29,13 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  capacity:
+    storage: {{ $.Values.volumeClaimTemplates.events.storage }}
   awsElasticBlockStore:
     fsType: ext4
     {{- with index $.Values.volumeClaimTemplates.events.volumeIds . }}
     volumeID: {{ . }} 
     {{- end }}
-    capacity:
-      storage: {{ $.Values.volumeClaimTemplates.events.storage }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
 {{ end }}
@@ -49,13 +49,13 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  capacity:
+    storage: {{ $.Values.volumeClaimTemplates.exts.storage }}
   awsElasticBlockStore:
     fsType: ext4
     {{- with index $.Values.volumeClaimTemplates.exts.volumeIds . }}
     volumeID: {{ . }} 
     {{- end }}
-    capacity:
-      storage: {{ $.Values.volumeClaimTemplates.exts.storage }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
 {{ end }}
@@ -69,13 +69,13 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  capacity:
+    storage: {{ $.Values.volumeClaimTemplates.plugins.storage }}
   awsElasticBlockStore:
     fsType: ext4
     {{- with index $.Values.volumeClaimTemplates.plugins.volumeIds . }}
     volumeID: {{ . }} 
     {{- end }}
-    capacity:
-      storage: {{ $.Values.volumeClaimTemplates.plugins.storage }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
 {{ end }}
@@ -89,13 +89,13 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  capacity:
+    storage: {{ $.Values.volumeClaimTemplates.snapshots.storage }}
   awsElasticBlockStore:
     fsType: ext4
     {{- with index $.Values.volumeClaimTemplates.snapshots.volumeIds . }}
     volumeID: {{ . }} 
     {{- end }}
-    capacity:
-      storage: {{ $.Values.volumeClaimTemplates.snapshots.storage }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
 {{ end }}
