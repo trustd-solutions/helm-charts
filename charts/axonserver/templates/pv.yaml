@@ -21,6 +21,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
   claimRef:
+    namespace: {{ $.Release.Namespace }}
     name: data-axonserver-{{ . }}
 {{ end }}
 
@@ -45,6 +46,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
   claimRef:
+    namespace: {{ $.Release.Namespace }}
     name: events-axonserver-{{ . }}
 {{ end }}
 
@@ -69,6 +71,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
   claimRef:
+    namespace: {{ $.Release.Namespace }}
     name: exts-axonserver-{{ . }}
 {{ end }}
 
@@ -93,6 +96,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
   claimRef:
+    namespace: {{ $.Release.Namespace }}
     name: plugins-axonserver-{{ . }}
 {{ end }}
 
@@ -117,6 +121,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
   claimRef:
+    namespace: {{ $.Release.Namespace }}
     name: snapshots-axonserver-{{ . }}
 {{ end }}
 
