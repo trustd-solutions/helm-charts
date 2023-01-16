@@ -107,27 +107,27 @@ spec:
         - name: log
           emptyDir: {}
 
-        {{ if .Values.volumeClaimTemplates.data.enabled }}
+        {{if not .Values.volumeClaimTemplates.data.enabled }}
         - name: data
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.events.enabled }}
+        {{ if not .Values.volumeClaimTemplates.events.enabled }}
         - name: events
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.exts.enabled }}
+        {{ if not .Values.volumeClaimTemplates.exts.enabled }}
         - name: exts
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.plugins.enabled }}
+        {{ if not .Values.volumeClaimTemplates.plugins.enabled }}
         - name: plugins
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.snapshots.enabled }}
+        {{ if not .Values.volumeClaimTemplates.snapshots.enabled }}
         - name: snapshots
           emptyDir: {}
         {{ end }}
@@ -147,7 +147,7 @@ spec:
             secretName: axonserver-license
         {{end}}
   volumeClaimTemplates:
-    {{ if ne .Values.volumeClaimTemplates.data.enabled true }}
+    {{ if .Values.volumeClaimTemplates.data.enabled }}
     - metadata:
         name: data
       spec:
@@ -183,7 +183,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.exts.storage}}
     {{ end }}
     
-    {{ if .Values.volumeClaimTemplates.plugins.enbled }}
+    {{ if .Values.volumeClaimTemplates.plugins.enabled }}
     - metadata:
         name: plugins
       spec:
