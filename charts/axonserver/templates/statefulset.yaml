@@ -107,27 +107,27 @@ spec:
         - name: log
           emptyDir: {}
 
-        {{ if .Values.volumeClaimTemplates.data.enabled }}
+        {{if not .Values.volumeClaimTemplates.data.enabled }}
         - name: data
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.events.enabled }}
+        {{ if not .Values.volumeClaimTemplates.events.enabled }}
         - name: events
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.exts.enabled }}
+        {{ if not .Values.volumeClaimTemplates.exts.enabled }}
         - name: exts
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.plugins.enabled }}
+        {{ if not .Values.volumeClaimTemplates.plugins.enabled }}
         - name: plugins
           emptyDir: {}
         {{ end }}
 
-        {{ if .Values.volumeClaimTemplates.snapshots.enabled }}
+        {{ if not .Values.volumeClaimTemplates.snapshots.enabled }}
         - name: snapshots
           emptyDir: {}
         {{ end }}
@@ -147,7 +147,7 @@ spec:
             secretName: axonserver-license
         {{end}}
   volumeClaimTemplates:
-    {{ if ne .Values.volumeClaimTemplates.data.enabled true }}
+    {{ if and (.Values.volumeClaimTemplates.data.enabled) (not .Values.volumeClaimTemplates.data.volumeIds) }}
     - metadata:
         name: data
       spec:
@@ -159,7 +159,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
     {{ end }}
 
-    {{ if .Values.volumeClaimTemplates.events.enabled }}
+    {{ if and (.Values.volumeClaimTemplates.events.enabled) (not .Values.volumeClaimTemplates.events.volumeIds) }}
     - metadata:
         name: events
       spec:
@@ -171,7 +171,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
     {{ end }}
 
-    {{ if .Values.volumeClaimTemplates.exts.enabled }}
+    {{ if and (.Values.volumeClaimTemplates.exts.enabled) (not .Values.volumeClaimTemplates.exts.volumeIds) }}
     - metadata:
         name: exts
       spec:
@@ -183,7 +183,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.exts.storage}}
     {{ end }}
     
-    {{ if .Values.volumeClaimTemplates.plugins.enbled }}
+    {{ if and (.Values.volumeClaimTemplates.plugins.enabled) (not .Values.volumeClaimTemplates.plugins.volumeIds) }}
     - metadata:
         name: plugins
       spec:
@@ -195,7 +195,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.plugins.storage}}
     {{ end }}
 
-    {{ if .Values.volumeClaimTemplates.snapshots.enabled }}
+    {{ if and (.Values.volumeClaimTemplates.snapshots.enabled) (not .Values.volumeClaimTemplates.snapshots.volumeIds) }}
     - metadata:
         name: snapshots
       spec:
@@ -206,3 +206,4 @@ spec:
           requests:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
     {{ end }}
+
