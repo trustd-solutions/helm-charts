@@ -159,9 +159,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.data.storage}}
         {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
         {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        selector:
-          matchLabels:
-            identifier: data-axonserver-{{ . }}  
+        volumeName: data-axonserver-{{ . }}  
         {{ end }}
         {{- end }}
     {{ end }}
@@ -178,9 +176,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.events.storage}}
         {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
         {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        selector:
-          matchLabels:
-            identifier: events-axonserver-{{ . }}  
+        volumeName: events-axonserver-{{ . }}  
         {{ end }}
         {{- end }}
     {{ end }}
@@ -197,9 +193,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.exts.storage}}
         {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
         {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        selector:
-          matchLabels:
-            identifier: exts-axonserver-{{ . }}  
+        volumeName: exts-axonserver-{{ . }}  
         {{ end }}
         {{- end }}
     {{ end }}
@@ -216,9 +210,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.plugins.storage}}
         {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
         {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        selector:
-          matchLabels:
-            identifier: plugins-axonserver-{{ . }}  
+        volumeName: plugins-axonserver-{{ . }}  
         {{ end }}
         {{- end }}
     {{ end }}
@@ -235,9 +227,7 @@ spec:
             storage: {{.Values.volumeClaimTemplates.snapshots.storage}}
         {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
         {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
-        selector:
-          matchLabels:
-            identifier: snapshots-axonserver-{{ . }}  
+        volumeName: snapshots-axonserver-{{ . }}  
         {{ end }}
         {{- end }}
     {{ end }}
