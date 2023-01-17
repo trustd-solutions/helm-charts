@@ -45,7 +45,6 @@ spec:
           protocol: TCP
         {{if eq $.Values.app.platform "ee"}}
         env:
-        # verify
         {{- range $.Values.statefulset.env }}
         - name: {{ .name }}
           value: {{ .value }}
