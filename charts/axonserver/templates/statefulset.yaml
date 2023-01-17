@@ -169,7 +169,7 @@ spec:
         {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}    
         - name: recovery-file
           secret:
-            secretName: recovery-file
+            secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
 
