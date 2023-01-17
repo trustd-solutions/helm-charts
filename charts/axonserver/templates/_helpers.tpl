@@ -35,8 +35,7 @@ axoniq.axonserver.accesscontrol.internal-token={{randAlphaNum 8 }}-{{ randAlphaN
 axoniq:
   {{.Values.app.name}}:
     cluster-template:
-      first: {{.Values.app.name}}-0.{{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local:8224
-
+      first: {{$.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
       users:
       - roles:
         - context: _admin
@@ -52,9 +51,9 @@ axoniq:
 
       replicationGroups:
       - roles:
-{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}
+          node: {{$.Values.app.name}}-{{ . }}-0
 {{- end }}
         name: _admin
         contexts:
@@ -63,9 +62,9 @@ axoniq:
             event.index-format: JUMP_SKIP_INDEX
             snapshot.index-format: JUMP_SKIP_INDEX
       - roles:
-{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}
+          node: {{$.Values.app.name}}-{{ . }}-0
 {{- end }}
         name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
         contexts:
