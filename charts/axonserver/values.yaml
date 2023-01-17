@@ -37,6 +37,8 @@ resources:
     cpu: 250m
     memory: 500Mi
 
+nodeSelectorPerPod: []
+
 # The volumeIds, a list present in each volumeClaimTemplate within this Helm Chart is optional.
 # It can be used if there are AWS EBS volumes to be used in the PVC. If the list is empty, the PVC will setup AWS EBS volumes.
 # When using the volumeIds be aware that the list should have the same length equals to the axonserver statefulset replicas count.

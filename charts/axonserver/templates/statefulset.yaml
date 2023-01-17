@@ -23,6 +23,12 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
+      {{ if .Values.nodeSelectorPerPod }}
+      {{- range .Values.nodeSelectorPerPod }}
+      nodeSelector:
+        {{ . }}
+      {{- end }}
+      {{ end }}
       containers:
       - name: {{.Values.app.name}}
         image: {{.Values.statefulset.container.image}}
