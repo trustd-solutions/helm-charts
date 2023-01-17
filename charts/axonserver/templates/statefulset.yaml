@@ -21,10 +21,10 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
-      {{ range $.Values.aws.azs }}
+      {{- with index $.Values.aws.azs . }}
       nodeSelector:
         topology.kubernetes.io/zone: {{ . }}
-      {{ end }}  
+      {{- end }}  
       containers:
       - name: {{$.Values.app.name}}
         image: {{$.Values.statefulset.container.image}}
@@ -44,7 +44,7 @@ spec:
           containerPort: {{$.Values.service.ports.gui}}
           protocol: TCP
         {{if eq $.Values.app.platform "ee"}}
-        env: 
+        env:
         {{- range $.Values.statefulset.env }}
         - name: {{ .name }}
           value: {{ .value }}
