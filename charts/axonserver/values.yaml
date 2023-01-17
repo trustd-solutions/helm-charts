@@ -5,8 +5,6 @@ app:
 
 statefulset:
   podManagementPolicy: Parallel
-  # The 'replicas' value applies to the axonserver-ee only.
-  # For the axonserver-se platform "replicas: 1"
   count: 3
   container:
     image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev

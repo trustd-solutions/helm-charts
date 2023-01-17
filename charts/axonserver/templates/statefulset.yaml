@@ -1,4 +1,5 @@
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
