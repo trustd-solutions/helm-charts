@@ -6,6 +6,7 @@ metadata:
   labels:
     app: {{$.Values.app.name}}
 spec:
+  hostname: {{$.Values.app.name}}-{{ . }}
   podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
   serviceName: {{$.Values.app.name}}-svc
   replicas: 1
