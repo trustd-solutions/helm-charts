@@ -7,7 +7,7 @@ statefulset:
   podManagementPolicy: Parallel
   # The 'replicas' value applies to the axonserver-ee only.
   # For the axonserver-se platform "replicas: 1"
-  replicas: 3
+  count: 3
   container:
     image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
     workdir: /axonserver
@@ -50,6 +50,9 @@ resources:
 
 # The vol-id0001 will be attached to data-axonserver-0 
 # The vol-id0002 will be attached to data-axonserver-1 
+
+aws:
+  azs: []
 
 volumeClaimTemplates:
   storageClassName: ""
