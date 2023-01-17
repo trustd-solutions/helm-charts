@@ -106,6 +106,7 @@ axoniq:
     systemToken: ""
     propertiesBase64: ""
     clusterTemplateBase64: ""
+    recoveryFileBase64: ""
 
 service:
   ports:
