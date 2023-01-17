@@ -87,7 +87,7 @@ spec:
           mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
-        {{ if .Values.axoniq.axonserver.recoveryFileBase64 }}
+        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
         - name: recovery-file
           mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
           subPath: recovery.json
@@ -166,7 +166,7 @@ spec:
         - name: license
           secret:
             secretName: axonserver-license
-        {{ if .Values.axoniq.axonserver.recoveryFileBase64 }}    
+        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}    
         - name: recovery-file
           secret:
             secretName: recovery-file
