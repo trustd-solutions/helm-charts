@@ -1,4 +1,4 @@
-{{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
+{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
 
 {{ if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
 ---
