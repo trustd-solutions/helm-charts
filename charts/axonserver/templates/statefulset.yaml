@@ -23,10 +23,10 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
-      {{ if .Values.nodeSelectorPerPod }}
-      {{- range .Values.nodeSelectorPerPod }}
+      {{ if .Values.nodeSelectors.aws.zones }}
+      {{- range .Values.nodeSelectors.aws.zones }}
       nodeSelector:
-        {{ . }}
+        topology.kubernetes.io/zone: {{ . }}
       {{- end }}
       {{ end }}
       containers:
