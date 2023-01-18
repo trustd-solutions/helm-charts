@@ -104,6 +104,7 @@ axoniq:
     systemToken: ""
     propertiesBase64: ""
     clusterTemplateBase64: ""
+    # https://docs.axoniq.io/reference-guide/axon-server/administration/recovery
     recoveryFileBase64: ""
 
 service:
