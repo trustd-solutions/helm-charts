@@ -14,7 +14,6 @@ spec:
   selector:
     app: {{.Values.app.name}}
   type: ClusterIP
-  clusterIP: None
 
 ---
 apiVersion: v1
