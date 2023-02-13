@@ -27,6 +27,9 @@ spec:
   - name: grpc
     port: {{ .Values.service.ports.grpc }}
     targetPort: {{ .Values.service.ports.grpc }}
+  - name: internal-grpc
+    port: 8224
+    targetPort: 8224
   selector:
     app: {{.Values.app.name}}
   type: ClusterIP
