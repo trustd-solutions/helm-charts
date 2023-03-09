@@ -35,74 +35,84 @@ resources:
     cpu: 250m
     memory: 500Mi
 
-# The volumeIds, a list present in each volumeClaimTemplate within this Helm Chart is optional.
-# It can be used if there are AWS EBS volumes to be used in the PVC. If the list is empty, the PVC will setup AWS EBS volumes.
-# When using the volumeIds be aware that the list should have the same length equals to the axonserver statefulset replicas count.
-# The EBS volumes will be binded to the PVCs in the same order as presented within the list.
-
-# Example:
-# data:  
-#   volumeIds:
-#    - vol-id0001  # AWS EBS id
-#    - vol-id0002  # AWS EBS id
-
-# The vol-id0001 will be attached to data-axonserver-0 
-# The vol-id0002 will be attached to data-axonserver-1 
+nodeSelector: {}
 
 aws:
+  # .Values.aws.azs overwrites .Values.nodeSelector. It should be set as a list of AWS Avalability Zones names (AZ)
+  # which its length should be equal to .Values.statefulset.count. An AZ from the list will be attached to each 
+  # statefulset pod by corresponding the list order with the statefulset order.
   azs: []
 
+# If "enabled" is set to false and it is not provided a previously set Kubernetes
+# Persistent Volume Claim (PVC), the pods will use emptyDir volumes.
+
+# If it is provided previously set Persistent Volume Claims (PVCs) 
+# that has the same name as the PVCs provided by the volumeClaimTeamplates,
+# the provided PVCs  will be used.
+
+# Considering .Values.statefulset.replicas = 2
+# PVC names example for the "data" volumeClaimTemplate: 
+# data-{{.Release.Name}}-0
+# data-{{.Release.Name}}-1
+
+# accepted values for name are data, events, exts, plugins, snapshots.
+
+
 volumeClaimTemplates:
-  storageClassName: ""
-  data:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 1Gi
-  events:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  exts:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  plugins:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  snapshots:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
+  defaults:
+    storageClassName: gp2-retain
+  claims:
+    data:
+      enabled: true
+      storageClassName: ""
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+    events:
+      enabled: true
+      storageClassName: ""
+      accessModes:
+        - ReadWriteOnce
+      storage: 5Gi
+    exts:
+      enabled: false
+      storageClassName: ""
+      accessModes:
+        - ReadWriteOnce
+      storage: 5Gi
+    plugins:
+      enabled: false
+      storageClassName: ""
+      accessModes:
+        - ReadWriteOnce
+      storage: 5Gi
+    snapshots:
+      enabled: true
+      storageClassName: ""
+      accessModes:
+        - ReadWriteOnce
+      storage: 5Gi
 
 axoniq:
   axonserver:
     devmode:
-    # devmode is only applicable if .Values.app.plaform: se
+      # devmode is only applicable if .Values.app.plaform: se
       enabled: false
-    # The licenseBase64 value is optional and it applies to the axonserver-ee only.
-    licenseBase64: ""
     admin:
       userName: "admin"
       password: ""
-    defaultContextName: default
-    defaultReplicationGroupName: default
     properties:
       logging:
         maxHistory: 10
         maxSize: 10MB
+    # The licenseBase64 value is optional and it applies to the axonserver-ee only.
+    licenseBase64: ""         
+    defaultContextName: default
+    defaultReplicationGroupName: default
     systemToken: ""
+    # If this value is not empty when decoded, it overwrites the axonserver properties provided by this Helm chart.
     propertiesBase64: ""
+    # If this value is not empty when decoded, it overwrites the axonserver cluster-template provided by this Helm chart.
     clusterTemplateBase64: ""
     recoveryFileBase64: ""
 
