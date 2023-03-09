@@ -1,3 +1,4 @@
+{{- $vol :=  list "data" "events" "exts" "plugins" "snapshots" }}
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
 ---
 apiVersion: apps/v1
@@ -21,10 +22,14 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
-      {{- with index $.Values.aws.azs . }}
       nodeSelector:
+      {{ if ne $.Values.aws.azs }}
+        {{ with index $.Values.aws.azs . }}
         topology.kubernetes.io/zone: {{ . }}
-      {{- end }}  
+        {{ end }} 
+      {{ else }}
+        {{ toYaml $.Values.nodeSelector. | indent 8 -}}
+      {{ end }} 
       containers:
       - name: {{$.Values.app.name}}
         image: {{$.Values.statefulset.container.image}}
@@ -114,45 +119,15 @@ spec:
         - name: log
           emptyDir: {}
     
-        - name: data
-          {{ if not $.Values.volumeClaimTemplates.data.enabled }}
-          emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+        {{- range $v := $.Values.volumeClaimTemplates }} 
+        {{ if or ((lookup "v1" "PersistentVolumeClaim" $.Release.Namespace "{{ $v.name }}-{{ $.Values.app.name }}-{{ . }}") ( has $v.name $vol )) }}
+        - name: $v.name
           persistentVolumeClaim: 
-            claimName: data-{{$.Values.app.name}}-{{ . }}
-          {{ end }}
-
-        - name: events
-          {{ if not $.Values.volumeClaimTemplates.events.enabled }}
+            claimName: {{ $v.name }}-{{ $.Values.app.name }}-{{ . }}
+        {{ else }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.events.enabled) ($.Values.volumeClaimTemplates.events.volumeIds) }}
-          persistentVolumeClaim: 
-            claimName: events-{{$.Values.app.name}}-{{ . }}
-          {{ end }}
-
-        - name: exts
-          {{ if not $.Values.volumeClaimTemplates.exts.enabled }}
-          emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.exts.enabled) ($.Values.volumeClaimTemplates.exts.volumeIds) }}
-          persistentVolumeClaim: 
-            claimName: exts-{{$.Values.app.name}}-{{ . }}
-          {{ end }}
-
-        - name: plugins
-          {{ if not $.Values.volumeClaimTemplates.plugins.enabled }}
-          emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.plugins.enabled) ($.Values.volumeClaimTemplates.plugins.volumeIds) }}
-          persistentVolumeClaim: 
-            claimName: plugins-{{$.Values.app.name}}-{{ . }}
-          {{ end }}
-
-        - name: snapshots
-          {{ if not $.Values.volumeClaimTemplates.snapshots.enabled }}
-          emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.snapshots.enabled) ($.Values.volumeClaimTemplates.snapshots.volumeIds) }}
-          persistentVolumeClaim: 
-            claimName: snapshots-{{$.Values.app.name}}-{{ . }}
-          {{ end }}
+        {{ end }}
+        {{- end }}
 
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
@@ -173,71 +148,20 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
-
+  {{- range $v := $.Values.volumeClaimTemplates }}
+  {{ if ( has $v.name "$vol" ) }}
   volumeClaimTemplates:
-    {{ if and ($.Values.volumeClaimTemplates.data.enabled) (not $.Values.volumeClaimTemplates.data.volumeIds) }}
     - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: data
+        namespace: {{ $.Release.Namespace }}
+        name: "{{ $v.name}}-{{ $.Values.app.name }}"
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ (toYaml $v.accessModes | nindent 10) }}
+        storageClassName: {{ $v.storageClassName }}
         resources:
           requests:
-            storage: {{ $.Values.volumeClaimTemplates.data.storage }}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.events.enabled) (not $.Values.volumeClaimTemplates.events.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: events
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.events.storage}}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.exts.enabled) (not $.Values.volumeClaimTemplates.exts.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: exts
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.exts.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.exts.storage}}
-    {{ end }}
-    
-    {{ if and ($.Values.volumeClaimTemplates.plugins.enabled) (not $.Values.volumeClaimTemplates.plugins.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: plugins
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.plugins.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.plugins.storage}}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.snapshots.enabled) (not $.Values.volumeClaimTemplates.snapshots.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: snapshots
-      spec:
-        accessModes: 
-          {{ toYaml $.Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }} 
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.snapshots.storage}}
-    {{ end }}
+            storage: {{ $v.storage }}
+  {{ end }}
+  {{- end }}
 
 {{- end }}
