@@ -1,160 +1,161 @@
-{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{$.Values.app.name}}-{{ . }}
+  name: {{.Values.app.name}}
   labels:
-    app: {{$.Values.app.name}}
+    app: {{.Values.app.name}}
 spec:
-  podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
-  serviceName: {{$.Values.app.name}}-svc
-  replicas: 1
+  podManagementPolicy: {{.Values.statefulset.podManagementPolicy}}
+  serviceName: {{.Values.app.name}}-svc
+  replicas: {{.Values.statefulset.replicas}}
   selector:
     matchLabels:
-      app: {{$.Values.app.name}}
+      app: {{.Values.app.name}}
   template:
     metadata:
       labels:
-        app: {{$.Values.app.name}}
+        app: {{.Values.app.name}}
     spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
+      {{- range untilStep 0 (int .Values.statefulset.replicas) 1 }}
       {{- with index $.Values.aws.azs . }}
       nodeSelector:
         topology.kubernetes.io/zone: {{ . }}
-      {{- end }}  
+      {{- end }}
+      {{- end }}
       containers:
-      - name: {{$.Values.app.name}}
-        image: {{$.Values.statefulset.container.image}}
+      - name: {{.Values.app.name}}
+        image: {{.Values.statefulset.container.image}}
         imagePullPolicy: IfNotPresent
         resources:
           limits:
-            cpu: {{$.Values.resources.limits.cpu}}
-            memory: {{$.Values.resources.limits.memory}}
+            cpu: {{.Values.resources.limits.cpu}}
+            memory: {{.Values.resources.limits.memory}}
           requests:
-            cpu: {{$.Values.resources.requests.cpu}}
-            memory: {{$.Values.resources.requests.cpu}}
+            cpu: {{.Values.resources.requests.cpu}}
+            memory: {{.Values.resources.requests.cpu}}
         ports:
         - name: grpc
-          containerPort: {{$.Values.service.ports.grpc}}
+          containerPort: {{.Values.service.ports.grpc}}
           protocol: TCP
         - name: gui
-          containerPort: {{$.Values.service.ports.gui}}
+          containerPort: {{.Values.service.ports.gui}}
           protocol: TCP
-        {{if eq $.Values.app.platform "ee"}}
+        {{if eq .Values.app.platform "ee"}}
         env:
-        {{- range $.Values.statefulset.env }}
+        {{- range .Values.statefulset.env }}
         - name: {{ .name }}
           value: {{ .value }}
         {{- end }}
         - name: AXONIQ_LICENSE
-          value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
+          value: {{.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
         - name: log
-          mountPath: {{$.Values.statefulset.container.workdir }}/log
+          mountPath: {{.Values.statefulset.container.workdir }}/log
         
         - name: data
-          mountPath: {{$.Values.statefulset.container.workdir }}/data
+          mountPath: {{.Values.statefulset.container.workdir }}/data
 
         - name: events
-          mountPath: {{$.Values.statefulset.container.workdir }}/events
+          mountPath: {{.Values.statefulset.container.workdir }}/events
 
         - name: exts
-          mountPath: {{$.Values.statefulset.container.workdir }}/exts
+          mountPath: {{.Values.statefulset.container.workdir }}/exts
 
         - name: plugins
-          mountPath: {{$.Values.statefulset.container.workdir }}/plugins
+          mountPath: {{.Values.statefulset.container.workdir }}/plugins
 
         - name: snapshots
-          mountPath: {{$.Values.statefulset.container.workdir }}/snapshots
+          mountPath: {{.Values.statefulset.container.workdir }}/snapshots
 
-        {{if eq $.Values.app.platform "ee"}}  
+        {{if eq .Values.app.platform "ee"}}  
         - name: properties
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
+          mountPath: {{.Values.statefulset.container.workdir }}/config/axonserver.properties
           subPath: axonserver.properties
           readOnly: true
         - name: cluster-template
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml
+          mountPath: {{.Values.statefulset.container.workdir }}/config/cluster-template.yaml
           subPath: cluster-template.yaml
           readOnly: true
         - name: system-token
-          mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
+          mountPath: {{.Values.statefulset.container.workdir }}/security/axoniq.token
           subPath: axoniq.token
           readOnly: true
         - name: license
-          mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
+          mountPath: {{.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
-        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
+        {{ if .Values.axoniq.axonserver.recoveryFileBase64 }}
         - name: recovery-file
-          mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
+          mountPath: {{.Values.statefulset.container.workdir }}/recovery.json
           subPath: recovery.json
         {{ end }}
         {{end}}
 
         readinessProbe:
           tcpSocket:
-            port: {{ $.Values.service.ports.gui }}
-          initialDelaySeconds: {{$.Values.statefulset.readiness.initialDelaySeconds}}
-          periodSeconds: {{$.Values.statefulset.readiness.periodSeconds}}
-          timeoutSeconds: {{$.Values.statefulset.readiness.timeoutSeconds}}
-          failureThreshold: {{$.Values.statefulset.readiness.failureThreshold}}
+            port: {{ .Values.service.ports.gui }}
+          initialDelaySeconds: {{.Values.statefulset.readiness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.readiness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.readiness.timeoutSeconds}}
+          failureThreshold: {{.Values.statefulset.readiness.failureThreshold}}
         livenessProbe:
           tcpSocket:
-            port: {{ $.Values.service.ports.gui }}
-          initialDelaySeconds: {{$.Values.statefulset.liveness.initialDelaySeconds}}
-          periodSeconds: {{$.Values.statefulset.liveness.periodSeconds}}
-          timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
-          successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
-          failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
+            port: {{ .Values.service.ports.gui }}
+          initialDelaySeconds: {{.Values.statefulset.liveness.initialDelaySeconds}}
+          periodSeconds: {{.Values.statefulset.liveness.periodSeconds}}
+          timeoutSeconds: {{.Values.statefulset.liveness.timeoutSeconds}}
+          successThreshold: {{.Values.statefulset.liveness.successThreshold}}
+          failureThreshold: {{.Values.statefulset.liveness.failureThreshold}}
       volumes:
         - name: log
           emptyDir: {}
     
         - name: data
-          {{ if not $.Values.volumeClaimTemplates.data.enabled }}
+          {{ if not .Values.volumeClaimTemplates.data.enabled }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.data.enabled) ($.Values.volumeClaimTemplates.data.volumeIds) }}
+          {{ else if and (.Values.volumeClaimTemplates.data.enabled) (.Values.volumeClaimTemplates.data.volumeIds) }}
           persistentVolumeClaim: 
-            claimName: data-{{$.Values.app.name}}-{{ . }}
+            claimName: data-{{.Values.app.name}}-{{ . }}
           {{ end }}
 
         - name: events
-          {{ if not $.Values.volumeClaimTemplates.events.enabled }}
+          {{ if not .Values.volumeClaimTemplates.events.enabled }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.events.enabled) ($.Values.volumeClaimTemplates.events.volumeIds) }}
+          {{ else if and (.Values.volumeClaimTemplates.events.enabled) (.Values.volumeClaimTemplates.events.volumeIds) }}
           persistentVolumeClaim: 
-            claimName: events-{{$.Values.app.name}}-{{ . }}
+            claimName: events-{{.Values.app.name}}-{{ . }}
           {{ end }}
 
         - name: exts
-          {{ if not $.Values.volumeClaimTemplates.exts.enabled }}
+          {{ if not .Values.volumeClaimTemplates.exts.enabled }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.exts.enabled) ($.Values.volumeClaimTemplates.exts.volumeIds) }}
+          {{ else if and (.Values.volumeClaimTemplates.exts.enabled) (.Values.volumeClaimTemplates.exts.volumeIds) }}
           persistentVolumeClaim: 
-            claimName: exts-{{$.Values.app.name}}-{{ . }}
+            claimName: exts-{{.Values.app.name}}-{{ . }}
           {{ end }}
 
         - name: plugins
-          {{ if not $.Values.volumeClaimTemplates.plugins.enabled }}
+          {{ if not .Values.volumeClaimTemplates.plugins.enabled }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.plugins.enabled) ($.Values.volumeClaimTemplates.plugins.volumeIds) }}
+          {{ else if and (.Values.volumeClaimTemplates.plugins.enabled) (.Values.volumeClaimTemplates.plugins.volumeIds) }}
           persistentVolumeClaim: 
-            claimName: plugins-{{$.Values.app.name}}-{{ . }}
+            claimName: plugins-{{.Values.app.name}}-{{ . }}
           {{ end }}
 
         - name: snapshots
-          {{ if not $.Values.volumeClaimTemplates.snapshots.enabled }}
+          {{ if not .Values.volumeClaimTemplates.snapshots.enabled }}
           emptyDir: {}
-          {{ else if and ($.Values.volumeClaimTemplates.snapshots.enabled) ($.Values.volumeClaimTemplates.snapshots.volumeIds) }}
+          {{ else if and (.Values.volumeClaimTemplates.snapshots.enabled) (.Values.volumeClaimTemplates.snapshots.volumeIds) }}
           persistentVolumeClaim: 
-            claimName: snapshots-{{$.Values.app.name}}-{{ . }}
+            claimName: snapshots-{{.Values.app.name}}-{{ . }}
           {{ end }}
 
-        {{if eq $.Values.app.platform "ee"}}  
+        {{if eq .Values.app.platform "ee"}}  
         - name: properties
           secret:
             secretName: axonserver-properties
@@ -167,77 +168,22 @@ spec:
         - name: license
           secret:
             secretName: axonserver-license
-        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}    
+        {{ if .Values.axoniq.axonserver.recoveryFileBase64 }}    
         - name: recovery-file
           secret:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
-
+  {{- range $v := .Values.volumeClaimTemplates }}
   volumeClaimTemplates:
-    {{ if and ($.Values.volumeClaimTemplates.data.enabled) (not $.Values.volumeClaimTemplates.data.volumeIds) }}
     - metadata:
         namespace: {{ .Release.Namespace }}
-        name: data
+        name: "{{ $v.name}}-{{ .Values.app.name }}"
       spec:
         accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.data.accessModes | nindent 10 }}
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
+          {{ toYaml $v.accessModes | nindent 10 }}
+        storageClassName: {{ $v.storageClassName  }}
         resources:
           requests:
-            storage: {{ $.Values.volumeClaimTemplates.data.storage }}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.events.enabled) (not $.Values.volumeClaimTemplates.events.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: events
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.events.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.events.storage}}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.exts.enabled) (not $.Values.volumeClaimTemplates.exts.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: exts
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.exts.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.exts.storage}}
-    {{ end }}
-    
-    {{ if and ($.Values.volumeClaimTemplates.plugins.enabled) (not $.Values.volumeClaimTemplates.plugins.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: plugins
-      spec:
-        accessModes:
-          {{ toYaml $.Values.volumeClaimTemplates.plugins.accessModes | nindent 10 }}  
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.plugins.storage}}
-    {{ end }}
-
-    {{ if and ($.Values.volumeClaimTemplates.snapshots.enabled) (not $.Values.volumeClaimTemplates.snapshots.volumeIds) }}
-    - metadata:
-        namespace: {{ .Release.Namespace }}
-        name: snapshots
-      spec:
-        accessModes: 
-          {{ toYaml $.Values.volumeClaimTemplates.snapshots.accessModes | nindent 10 }} 
-        storageClassName: {{ $.Values.volumeClaimTemplates.storageClassName  }}
-        resources:
-          requests:
-            storage: {{$.Values.volumeClaimTemplates.snapshots.storage}}
-    {{ end }}
-
-{{- end }}
+            storage: {{ $v.storage }}
+  {{- end }}
