@@ -37,7 +37,7 @@ axoniq.axonserver.heartbeat.enabled=true
 axoniq:
   {{.Values.app.name}}:
     cluster-template:
-      first: {{$.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
+      first: {{$.Values.app.name}}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
       users:
       - roles:
         - context: _admin

@@ -5,7 +5,7 @@ app:
 
 statefulset:
   podManagementPolicy: Parallel
-  count: 3
+  replicas: 3
   container:
     image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
     workdir: /axonserver
