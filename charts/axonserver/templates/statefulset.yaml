@@ -175,10 +175,9 @@ spec:
         {{end}}
   {{- range $v := $.Values.volumeClaimTemplates }}
   volumeClaimTemplates:
-    #{{ if and ($.Values.volumeClaimTemplates.data.enabled) (not $.Values.volumeClaimTemplates.data.volumeIds) }}
     - metadata:
         namespace: {{ .Release.Namespace }}
-        name: {{ $v.name}}-{{$.Values.app.name}}-{{ . }}
+        name: {{ $v.name}}-{{$.Values.app.name}}
       spec:
         accessModes:
           {{ toYaml $v.accessModes | nindent 10 }}
