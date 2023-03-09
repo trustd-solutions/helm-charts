@@ -5,7 +5,7 @@ app:
 
 statefulset:
   podManagementPolicy: Parallel
-  count: 3
+  replicas: 3
   container:
     image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
     workdir: /axonserver
@@ -35,55 +35,27 @@ resources:
     cpu: 250m
     memory: 500Mi
 
-# The volumeIds, a list present in each volumeClaimTemplate within this Helm Chart is optional.
-# It can be used if there are AWS EBS volumes to be used in the PVC. If the list is empty, the PVC will setup AWS EBS volumes.
-# When using the volumeIds be aware that the list should have the same length equals to the axonserver statefulset replicas count.
-# The EBS volumes will be binded to the PVCs in the same order as presented within the list.
-
-# Example:
-# data:  
-#   volumeIds:
-#    - vol-id0001  # AWS EBS id
-#    - vol-id0002  # AWS EBS id
-
-# The vol-id0001 will be attached to data-axonserver-0 
-# The vol-id0002 will be attached to data-axonserver-1 
-
 aws:
   azs: []
 
-volumeClaimTemplates:
-  storageClassName: ""
-  data:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 1Gi
-  events:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  exts:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  plugins:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  snapshots:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
+volumeClaimTemplates: {}
+# - name: data
+#   storageClassName: ""
+#   accessModes:
+#   - ReadWriteOnce
+#   storage: 1Gi
+  
+# - name: events
+#   storageClassName: ""
+#   accessModes:
+#   - ReadWriteOnce
+#   storage: 5Gi
+  
+# - name: snapshots
+#   storageClassName: ""
+#   accessModes:
+#   - ReadWriteOnce
+#   storage: 5Gi
 
 axoniq:
   axonserver:
