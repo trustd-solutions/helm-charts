@@ -184,6 +184,4 @@ spec:
         resources:
           requests:
             storage: {{ $v.storage }}
-    {{ end }}
   {{- end }}
-
