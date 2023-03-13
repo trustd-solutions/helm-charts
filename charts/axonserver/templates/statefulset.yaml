@@ -28,7 +28,7 @@ spec:
         topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
       {{ else }}
-        {{ toYaml $.Values.nodeSelector. | indent 8 -}}
+        {{ toYaml $.Values.nodeSelector | indent 8 -}}
       {{ end }} 
       containers:
       - name: {{$.Values.app.name}}
