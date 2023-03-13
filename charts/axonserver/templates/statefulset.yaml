@@ -23,7 +23,7 @@ spec:
         runAsUser: 1001
         fsGroup: 1001
       nodeSelector:
-      {{ if ne $.Values.aws.azs }}
+      {{ if $.Values.aws.azs }}
         {{ with index $.Values.aws.azs . }}
         topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
