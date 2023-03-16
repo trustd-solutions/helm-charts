@@ -115,6 +115,7 @@ spec:
           timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
           successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
+
       volumes:    
         {{- range $name, $v := $.Values.volumeClaimTemplates }}
         - name: {{ $name }}
@@ -145,6 +146,7 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
+
   {{- range $name, $v := $.Values.volumeClaimTemplates }}
   {{ if $v.enabled }}
   volumeClaimTemplates:
