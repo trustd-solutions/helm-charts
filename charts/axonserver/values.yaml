@@ -57,7 +57,6 @@ aws:
 
 # accepted values for name are data, events, exts, plugins, snapshots.
 
-
 volumeClaimTemplates:
   defaults:
     storageClassName: ""
