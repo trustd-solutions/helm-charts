@@ -115,18 +115,16 @@ spec:
           timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
           successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
-      volumes:
-        - name: log
-          emptyDir: {}
-    
-        {{- range $v := $.Values.volumeClaimTemplates }} 
-        {{ if or ((lookup "v1" "PersistentVolumeClaim" $.Release.Namespace "{{ $v.name }}-{{ $.Values.app.name }}-{{ . }}") ( has $v.name $vol )) }}
-        - name: $v.name
+
+      volumes:    
+        {{- range $name, $v := $.Values.volumeClaimTemplates }}
+        - name: {{ $name }}
+          {{ if $v.enabled }}
           persistentVolumeClaim: 
-            claimName: {{ $v.name }}-{{ $.Values.app.name }}-{{ . }}
-        {{ else }}
+            claimName: {{ $name }}-{{ $.Values.app.name }}-{{ . }}
+          {{ else }}
           emptyDir: {}
-        {{ end }}
+          {{ end }}
         {{- end }}
 
         {{if eq $.Values.app.platform "ee"}}  
@@ -148,12 +146,13 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
-  {{- range $v := $.Values.volumeClaimTemplates }}
-  {{ if ( has $v.name "$vol" ) }}
+
+  {{- range $name, $v := $.Values.volumeClaimTemplates }}
+  {{ if $v.enabled }}
   volumeClaimTemplates:
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: "{{ $v.name}}-{{ $.Values.app.name }}"
+        name: "{{ $name }}-{{ $.Values.app.name }}"
       spec:
         accessModes:
           {{ (toYaml $v.accessModes | nindent 10) }}

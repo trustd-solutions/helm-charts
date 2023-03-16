@@ -57,31 +57,48 @@ aws:
 
 # accepted values for name are data, events, exts, plugins, snapshots.
 
-volumeClaimTemplates: []
-# - name: data
-#   storageClassName: ""
-#   accessModes: []
-#   storage: 1Gi
+volumeClaimTemplates:
+  data:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 1Gi
   
-# - name: events
-#   storageClassName: ""
-#   accessModes: []
-#   storage: 5Gi
+  events:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 5Gi
   
-# - name: exts
-#   storageClassName: ""
-#   accessModes: []
-#   storage: 5Gi    
-
-# - name: plugins
-#   storageClassName: ""
-#   accessModes: []
-#   storage: 5Gi    
-
-# - name: snapshots
-#   storageClassName: ""
-#   accessModes: []
-#   storage: 5Gi
+  exts:
+    enabled: false
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 5Gi
+  
+  logs:
+    enabled: false
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 5Gi
+  
+  plugins:
+    enabled: false
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 5Gi
+  
+  snapshots:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: gp2-retain
+    storage: 5Gi
 
 axoniq:
   axonserver:
