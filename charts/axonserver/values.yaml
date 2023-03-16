@@ -1,7 +1,7 @@
 app:
   name: axonserver
-# platform: "ee" | "se"  
-  platform: "ee"
+# platform: ee | se  
+  platform: ee
 
 statefulset:
   podManagementPolicy: Parallel
@@ -35,55 +35,52 @@ resources:
     cpu: 250m
     memory: 500Mi
 
-# The volumeIds, a list present in each volumeClaimTemplate within this Helm Chart is optional.
-# It can be used if there are AWS EBS volumes to be used in the PVC. If the list is empty, the PVC will setup AWS EBS volumes.
-# When using the volumeIds be aware that the list should have the same length equals to the axonserver statefulset replicas count.
-# The EBS volumes will be binded to the PVCs in the same order as presented within the list.
-
-# Example:
-# data:  
-#   volumeIds:
-#    - vol-id0001  # AWS EBS id
-#    - vol-id0002  # AWS EBS id
-
-# The vol-id0001 will be attached to data-axonserver-0 
-# The vol-id0002 will be attached to data-axonserver-1 
-
 aws:
   azs: []
 
 volumeClaimTemplates:
-  storageClassName: ""
-  data:
-    enabled: true
-    volumeIds: []
+  defaults:
+    storageClassName: gp2-retain
     accessModes:
-      - ReadWriteOnce
-    storage: 1Gi
-  events:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     storage: 5Gi
-  exts:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  plugins:
-    enabled: false
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
-  snapshots:
-    enabled: true
-    volumeIds: []
-    accessModes:
-      - ReadWriteOnce
-    storage: 5Gi
+
+  templates:
+    data:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
+
+    events:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
+
+    exts:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
+
+    logs:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
+
+    plugins:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
+
+    snapshots:
+      enabled: true
+      storageClassName: ""
+      accessModes: []
+      storage: ""
 
 axoniq:
   axonserver:
@@ -93,7 +90,7 @@ axoniq:
     # The licenseBase64 value is optional and it applies to the axonserver-ee only.
     licenseBase64: ""
     admin:
-      userName: "admin"
+      userName: admin
       password: ""
     defaultContextName: default
     defaultReplicationGroupName: default
@@ -108,8 +105,8 @@ axoniq:
 
 service:
   ports:
-    grpc: "8124"
-    gui: "8024"
+    grpc: 8124
+    gui: 8024
 
 ingress:
   enabled: false
