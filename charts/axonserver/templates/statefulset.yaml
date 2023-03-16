@@ -1,3 +1,4 @@
+{{ $ns := .Release.Namespace }}
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
 ---
 apiVersion: apps/v1
@@ -150,7 +151,7 @@ spec:
   {{ if $v.enabled }}
   volumeClaimTemplates:
     - metadata:
-        namespace: {{ $.Release.Namespace }}
+        namespace: "{{ $ns }}"
         name: "{{ $name }}-{{ $.Values.app.name }}"
       spec:
         accessModes:
