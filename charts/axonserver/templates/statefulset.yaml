@@ -3,12 +3,12 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "{{$.Values.app.name}}-{{ . }}"
+  name: {{$.Values.app.name}}-{{ . }}
   labels:
     app: {{$.Values.app.name}}
 spec:
   podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
-  serviceName: "{{$.Values.app.name}}-svc"
+  serviceName: {{$.Values.app.name}}-svc
   replicas: 1
   selector:
     matchLabels:
@@ -53,47 +53,47 @@ spec:
           value: {{ .value }}
         {{ end }}
         - name: AXONIQ_LICENSE
-          value: "{{$.Values.statefulset.container.workdir }}/license/axoniq.license"
+          value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
         - name: log
-          mountPath: "{{$.Values.statefulset.container.workdir }}/log"
+          mountPath: {{$.Values.statefulset.container.workdir }}/log
         
         - name: data
-          mountPath: "{{$.Values.statefulset.container.workdir }}/data"
+          mountPath: {{$.Values.statefulset.container.workdir }}/data
 
         - name: events
-          mountPath: "{{$.Values.statefulset.container.workdir }}/events"
+          mountPath: {{$.Values.statefulset.container.workdir }}/events
 
         - name: exts
-          mountPath: "{{$.Values.statefulset.container.workdir }}/exts"
+          mountPath: {{$.Values.statefulset.container.workdir }}/exts
 
         - name: plugins
-          mountPath: "{{$.Values.statefulset.container.workdir }}/plugins"
+          mountPath: {{$.Values.statefulset.container.workdir }}/plugins
 
         - name: snapshots
-          mountPath: "{{$.Values.statefulset.container.workdir }}/snapshots"
+          mountPath: {{$.Values.statefulset.container.workdir }}/snapshots
 
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
-          mountPath: "{{$.Values.statefulset.container.workdir }}/config/axonserver.properties"
+          mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
           subPath: axonserver.properties
           readOnly: true
         - name: cluster-template
-          mountPath: "{{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml"
+          mountPath: {{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml
           subPath: cluster-template.yaml
           readOnly: true
         - name: system-token
-          mountPath: "{{$.Values.statefulset.container.workdir }}/security/axoniq.token"
+          mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
           subPath: axoniq.token
           readOnly: true
         - name: license
-          mountPath: "{{$.Values.statefulset.container.workdir }}/license/axoniq.license"
+          mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
         {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
         - name: recovery-file
-          mountPath: "{{$.Values.statefulset.container.workdir }}/recovery.json"
+          mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
           subPath: recovery.json
         {{ end }}
         {{end}}
