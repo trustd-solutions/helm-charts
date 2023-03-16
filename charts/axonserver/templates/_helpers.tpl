@@ -8,8 +8,8 @@ axoniq.axonserver.devmode.enabled={{ .Values.axoniq.axonserver.devmode.enabled }
 axoniq.axonserver.event.storage={{.Values.statefulset.container.workdir }}/events
 axoniq.axonserver.snapshot.storage={{.Values.statefulset.container.workdir }}/snapshots
 axoniq.axonserver.replication.log-storage-folder={{.Values.statefulset.container.workdir }}/log
-
 axoniq.axonserver.controldb-path={{.Values.statefulset.container.workdir }}/data
+
 axoniq.axonserver.pid-file-location={{.Values.statefulset.container.workdir }}/data
 
 logging.file={{.Values.statefulset.container.workdir }}/log/axonserver.log
