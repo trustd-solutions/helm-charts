@@ -116,7 +116,7 @@ spec:
           failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
 
       volumes:    
-        {{- range $name, $v := $.Values.volumeClaimTemplates }}
+        {{- range $name, $v := $.Values.volumeClaimTemplates.claims }}
         - name: {{ $name }}
           {{ if $v.enabled }}
           persistentVolumeClaim: 
@@ -146,16 +146,15 @@ spec:
         {{ end }}
         {{end}}
 
-  {{- range $name, $v := $.Values.volumeClaimTemplates }}
+  {{- range $name, $v := $.Values.volumeClaimTemplates.claims }}
   {{ if $v.enabled }}
   volumeClaimTemplates:
     - metadata:
-        namespace: {{ .Release.Namespace }}
         name: "{{ $name }}-{{ $.Values.app.name }}"
       spec:
         accessModes:
           {{ (toYaml $v.accessModes | nindent 10) }}
-        storageClassName: {{ $v.storageClassName }}
+        storageClassName: {{ $v.storageClassName | default $.Values.volumeClaimTemplates.defaults.storageClassName }}
         resources:
           requests:
             storage: {{ $v.storage }}
