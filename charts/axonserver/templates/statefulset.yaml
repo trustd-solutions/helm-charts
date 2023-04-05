@@ -21,12 +21,13 @@ spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
+      nodeSelector:
       {{ if $.Values.aws.azs }}
         {{ with index $.Values.aws.azs . }}
         topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
       {{ else }}
-        {{ toYaml $.Values.nodeSelector | indent 8 }}
+        {{- toYaml $.Values.nodeSelector | indent 2 }}
       {{ end }} 
       containers:
       - name: {{$.Values.app.name}}
