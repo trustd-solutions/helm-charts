@@ -25,7 +25,7 @@ spec:
       nodeSelector:
       {{ if $.Values.aws.azs }}
         {{ with index $.Values.aws.azs $counter }}
-        topology.kubernetes.io/zone: {{ $counter }}
+        topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
       {{ else }}
         {{- toYaml $.Values.nodeSelector | indent 2 }}
