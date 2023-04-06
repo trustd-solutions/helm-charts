@@ -1,36 +1,38 @@
 {{ range untilStep 0 (int .Values.statefulset.count) 1 }}
+{{ $counter := . }}
+{{ $appName := $.Values.app.name }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{$.Values.app.name}}-{{ . }}
+  name: {{$appName}}-{{ $counter }}
   labels:
-    app: {{$.Values.app.name}}
+    app: {{$appName}}
 spec:
   podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
-  serviceName: {{$.Values.app.name}}-svc
+  serviceName: {{$appName}}-svc
   replicas: 1
   selector:
     matchLabels:
-      app: {{$.Values.app.name}}
+      app: {{$appName}}
   template:
     metadata:
       labels:
-        app: {{$.Values.app.name}}
+        app: {{$appName}}
     spec:
       securityContext:
         runAsUser: 1001
         fsGroup: 1001
       nodeSelector:
       {{ if $.Values.aws.azs }}
-        {{ with index $.Values.aws.azs . }}
+        {{ with index $.Values.aws.azs $counter }}
         topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
       {{ else }}
         {{- toYaml $.Values.nodeSelector | indent 2 }}
       {{ end }} 
       containers:
-      - name: {{$.Values.app.name}}
+      - name: {{$appName}}
         image: {{$.Values.statefulset.container.image}}
         imagePullPolicy: IfNotPresent
         resources:
@@ -57,7 +59,7 @@ spec:
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
-        - name: log
+        - name: logs
           mountPath: {{$.Values.statefulset.container.workdir }}/log
         
         - name: data
@@ -119,7 +121,7 @@ spec:
         - name: {{ $k }}
           {{ if $v.enabled }}
           persistentVolumeClaim: 
-            claimName: "{{ $k }}-{{$.Values.app.name}}-{{ . }}"
+            claimName: {{ $k }}-{{$appName}}-{{ $ }}
           {{ else }}
           emptyDir: {}
           {{ end }}
@@ -149,7 +151,7 @@ spec:
     {{ if $v.enabled }}
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: "{{ $k }}-{{ $.Values.app.name }}"
+        name: {{ $k }}-{{ $appName }}
       spec:
         accessModes:
           {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
