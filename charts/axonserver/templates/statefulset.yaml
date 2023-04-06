@@ -121,11 +121,11 @@ spec:
         - name: {{ $k }}
           {{ if $v.enabled }}
           persistentVolumeClaim: 
-            claimName: {{ $k }}-{{$appName}}-{{ $ }}
+            claimName: {{ $k }}-{{$appName}}-{{ $counter }}
           {{ else }}
           emptyDir: {}
           {{ end }}
-        {{end}}
+        {{ end }}
 
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
