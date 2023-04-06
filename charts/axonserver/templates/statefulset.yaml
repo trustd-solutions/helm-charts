@@ -1,9 +1,10 @@
 {{ range untilStep 0 (int .Values.statefulset.count) 1 }}
+{{ $counter := . }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{$.Values.app.name}}-{{ . }}
+  name: {{$.Values.app.name}}-{{ $counter }}
   labels:
     app: {{$.Values.app.name}}
 spec:
@@ -23,7 +24,7 @@ spec:
         fsGroup: 1001
       nodeSelector:
       {{ if $.Values.aws.azs }}
-        {{ with index $.Values.aws.azs . }}
+        {{ with index $.Values.aws.azs $counter }}
         topology.kubernetes.io/zone: {{ . }}
         {{ end }} 
       {{ else }}
@@ -57,7 +58,7 @@ spec:
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
-        - name: log
+        - name: logs
           mountPath: {{$.Values.statefulset.container.workdir }}/log
         
         - name: data
@@ -119,7 +120,7 @@ spec:
         - name: {{ $k }}
           {{ if $v.enabled }}
           persistentVolumeClaim: 
-            claimName: "{{ $k }}-{{$.Values.app.name}}-{{ . }}"
+            claimName: {{ $k }}-{{$.Values.app.name}}-{{ $counter }}
           {{ else }}
           emptyDir: {}
           {{ end }}
@@ -149,7 +150,7 @@ spec:
     {{ if $v.enabled }}
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: "{{ $k }}-{{ $.Values.app.name }}"
+        name: {{ $k }}-{{ $.Values.app.name }}
       spec:
         accessModes:
           {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
