@@ -57,7 +57,7 @@ spec:
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
-        - name: log
+        - name: logs
           mountPath: {{$.Values.statefulset.container.workdir }}/log
         
         - name: data
@@ -149,7 +149,7 @@ spec:
     {{ if $v.enabled }}
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: "{{ $k }}-{{ $.Values.app.name }}"
+        name: {{ $k }}-{{ $.Values.app.name }}
       spec:
         accessModes:
           {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
