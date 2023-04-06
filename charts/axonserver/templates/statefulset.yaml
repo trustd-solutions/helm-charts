@@ -1,6 +1,7 @@
 {{ range untilStep 0 (int .Values.statefulset.count) 1 }}
 {{ $counter := . }}
 {{ $appName := $.Values.app.name }}
+
 ---
 apiVersion: apps/v1
 kind: StatefulSet
