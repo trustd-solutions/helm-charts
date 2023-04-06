@@ -149,7 +149,7 @@ spec:
     {{ if $v.enabled }}
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: "{{ $k }}-{{ $.Values.app.name }}"
+        name: {{ $k }}-{{ $.Values.app.name }}
       spec:
         accessModes:
           {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
