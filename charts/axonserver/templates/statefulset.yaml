@@ -57,7 +57,7 @@ spec:
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
         volumeMounts:
-        - name: log
+        - name: logs
           mountPath: {{$.Values.statefulset.container.workdir }}/log
         
         - name: data
