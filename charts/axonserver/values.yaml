@@ -46,7 +46,6 @@ volumeClaimTemplates:
     accessModes:
     - ReadWriteOnce
     storage: 5Gi
-
   templates:
     data:
       enabled: true
