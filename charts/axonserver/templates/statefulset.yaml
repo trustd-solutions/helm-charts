@@ -151,7 +151,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         namespace: {{ $.Release.Namespace }}
-        name: {{ $k }}-{{ $appName }}
+        name: {{ $k }}
       spec:
         accessModes:
           {{ default $.Values.volumeClaimTemplates.defaults.accessModes $v.accessModes | toYaml | nindent 10 }}
