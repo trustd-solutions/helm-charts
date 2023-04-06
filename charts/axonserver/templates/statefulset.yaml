@@ -146,20 +146,5 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
-  {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
-  volumeClaimTemplates:
-    {{ if $v.enabled }}
-    - metadata:
-        namespace: {{ $.Release.Namespace }}
-        name: {{ $k }}-{{ $appName }}
-      spec:
-        accessModes:
-          {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
-        storageClassName: {{ $v.storageClassName | default $.Values.volumeClaimTemplates.defaults.storageClassName }}
-        resources:
-          requests:
-            storage: {{ $v.storage | default $.Values.volumeClaimTemplates.defaults.storage }}
-    {{ end }}
-  {{end}}
 
 {{ end }}
