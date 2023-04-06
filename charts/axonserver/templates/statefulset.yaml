@@ -121,7 +121,7 @@ spec:
         - name: {{ $k }}
           {{ if $v.enabled }}
           persistentVolumeClaim: 
-            claimName: {{ $k }}-{{$appName}}-{{ $counter }}
+            claimName: {{ $k }}-{{$appName}}-{{ $counter }}-0
           {{ else }}
           emptyDir: {}
           {{ end }}
