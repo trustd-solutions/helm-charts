@@ -49,16 +49,34 @@ volumeClaimTemplates:
   templates:
     data:
       enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
     events:
       enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
     exts:
-      enabled: false
+      enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
     logs:
-      enabled: false
+      enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
     plugins:
-      enabled: false
+      enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
     snapshots:
       enabled: true
+      #storageClassName: ""
+      #accessModes: []
+      #storage: ""
 
 axoniq:
   axonserver:
