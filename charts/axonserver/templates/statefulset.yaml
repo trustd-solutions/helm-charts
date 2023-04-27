@@ -106,6 +106,7 @@ spec:
           initialDelaySeconds: {{$.Values.statefulset.readiness.initialDelaySeconds}}
           periodSeconds: {{$.Values.statefulset.readiness.periodSeconds}}
           timeoutSeconds: {{$.Values.statefulset.readiness.timeoutSeconds}}
+          successThreshold: {{$.Values.statefulset.readiness.successThreshold}}
           failureThreshold: {{$.Values.statefulset.readiness.failureThreshold}}
         # livenessProbe:
         #   tcpSocket:
