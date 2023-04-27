@@ -100,7 +100,6 @@ spec:
           subPath: recovery.json
         {{ end }}
         {{end}}
-
         readinessProbe:
           tcpSocket:
             port: {{ $.Values.service.ports.cluster }}
