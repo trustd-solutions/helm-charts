@@ -102,7 +102,7 @@ spec:
         {{end}}
         readinessProbe:
           tcpSocket:
-            port: {{ $.Values.service.ports.cluster }}
+            port: {{ $.Values.service.ports.gui }}
           initialDelaySeconds: {{$.Values.statefulset.readiness.initialDelaySeconds}}
           periodSeconds: {{$.Values.statefulset.readiness.periodSeconds}}
           timeoutSeconds: {{$.Values.statefulset.readiness.timeoutSeconds}}
@@ -110,7 +110,7 @@ spec:
           failureThreshold: {{$.Values.statefulset.readiness.failureThreshold}}
         livenessProbe:
           tcpSocket:
-            port: {{ $.Values.service.ports.cluster }}
+            port: {{ $.Values.service.ports.gui }}
           initialDelaySeconds: {{$.Values.statefulset.liveness.initialDelaySeconds}}
           periodSeconds: {{$.Values.statefulset.liveness.periodSeconds}}
           timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
