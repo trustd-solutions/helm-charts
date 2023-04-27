@@ -18,14 +18,7 @@ statefulset:
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
-    failureThreshold: 12  
-
-  liveness:
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 2
-    successThreshold: 1
-    failureThreshold: 3
+    failureThreshold: 24
 
 resources:
   limits:
