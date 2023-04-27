@@ -15,17 +15,16 @@ statefulset:
 
   readiness:
     initialDelaySeconds: 5
-    periodSeconds: 5
-    timeoutSeconds: 1
+    periodSeconds: 10
+    timeoutSeconds: 2
     successThreshold: 1
-    failureThreshold: 12  
-
+    failureThreshold: 12 
   liveness:
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 2
     successThreshold: 1
-    failureThreshold: 3
+    failureThreshold: 12
 
 resources:
   limits:
@@ -101,6 +100,7 @@ axoniq:
 
 service:
   ports:
+    cluster: 8224
     grpc: 8124
     gui: 8024
 
