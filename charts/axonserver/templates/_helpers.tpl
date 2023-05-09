@@ -12,6 +12,8 @@ axoniq.axonserver.controldb-path={{.Values.statefulset.container.workdir }}/data
 
 axoniq.axonserver.pid-file-location={{.Values.statefulset.container.workdir }}/data
 
+axoniq.axonserver.max-message-size=10485760
+
 logging.file={{.Values.statefulset.container.workdir }}/log/axonserver.log
 logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHistory | default "10"}}
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
