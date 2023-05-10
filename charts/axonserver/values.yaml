@@ -93,6 +93,7 @@ axoniq:
       logging:
         maxHistory: 10
         maxSize: 10MB
+      axonInspectorCredentials: ""
     systemToken: ""
     propertiesBase64: ""
     clusterTemplateBase64: ""

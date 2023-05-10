@@ -28,7 +28,7 @@ axoniq.axonserver.server.port={{.Values.service.ports.gui}}
 #  This the token used for the communication between axonserver nodes. This is not the System admin token.
 #  https://docs.axoniq.io/reference-guide/axon-server/security/access-control-ee
 axoniq.axonserver.accesscontrol.internal-token={{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}
-
+axon.inspector.credentials = {{.Values.axoniq.axonserver.properties.axonInspectorCredentials}}
 axoniq.axonserver.heartbeat.enabled=true
 {{- end -}}
 
