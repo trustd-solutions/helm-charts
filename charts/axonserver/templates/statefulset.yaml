@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         app: {{$appName}}
+        {{- with $.Values.podLabels }}{{ toYaml . | trim | nindent 8 }}{{- end }}
     spec:
       securityContext:
         runAsUser: 1001
@@ -27,10 +28,10 @@ spec:
       {{ if $.Values.aws.azs }}
         {{ with index $.Values.aws.azs $counter }}
         topology.kubernetes.io/zone: {{ . }}
-        {{ end }} 
+        {{ end }}
       {{ else }}
         {{- toYaml $.Values.nodeSelector | indent 2 }}
-      {{ end }} 
+      {{ end }}
       containers:
       - name: {{$appName}}
         image: {{$.Values.statefulset.container.image}}
