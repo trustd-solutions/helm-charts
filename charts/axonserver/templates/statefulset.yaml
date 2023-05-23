@@ -11,6 +11,8 @@ metadata:
 spec:
   podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
   serviceName: {{$appName}}-svc
+  updateStrategy:
+    type: {{ $.Values.statefulset.updateStrategy.type }}
   replicas: 1
   selector:
     matchLabels:
