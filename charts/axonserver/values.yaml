@@ -5,6 +5,8 @@ app:
 
 statefulset:
   podManagementPolicy: Parallel
+  updateStrategy:
+    type: OnDelete
   count: 3
   container:
     image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
