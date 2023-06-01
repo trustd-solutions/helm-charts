@@ -110,15 +110,15 @@ spec:
 
       volumes:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
+        {{ if $v.enabled }}
         - name: {{ $k }}
-          {{ if $v.enabled }}
           persistentVolumeClaim: 
             claimName: {{ $k }}-{{$appName}}-{{ $counter }}-0
           {{ else }}
           emptyDir: {}
           {{ end }}
         {{ end }}
-
+        
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           secret:
