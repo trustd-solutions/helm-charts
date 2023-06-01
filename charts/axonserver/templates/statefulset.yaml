@@ -81,7 +81,7 @@ spec:
         volumeMounts:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
-          mountPath: {{$.Values.statefulset.container.workdir}}/{{$k}}
+          mountPath: "{{$.Values.statefulset.container.workdir}}/{{$k}}"
         {{end}}
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
