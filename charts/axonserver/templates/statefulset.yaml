@@ -61,25 +61,27 @@ spec:
         - name: AXONIQ_LICENSE
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
-        volumeMounts:
-        - name: logs
-          mountPath: {{$.Values.statefulset.container.workdir }}/log
+        readinessProbe:
+          tcpSocket:
+            port: {{ $.Values.service.ports.gui }}
+          initialDelaySeconds: {{$.Values.statefulset.readiness.initialDelaySeconds}}
+          periodSeconds: {{$.Values.statefulset.readiness.periodSeconds}}
+          timeoutSeconds: {{$.Values.statefulset.readiness.timeoutSeconds}}
+          successThreshold: {{$.Values.statefulset.readiness.successThreshold}}
+          failureThreshold: {{$.Values.statefulset.readiness.failureThreshold}}
+        livenessProbe:
+          tcpSocket:
+            port: {{ $.Values.service.ports.gui }}
+          initialDelaySeconds: {{$.Values.statefulset.liveness.initialDelaySeconds}}
+          periodSeconds: {{$.Values.statefulset.liveness.periodSeconds}}
+          timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
+          successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
+          failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
         
-        - name: data
-          mountPath: {{$.Values.statefulset.container.workdir }}/data
-
-        - name: events
-          mountPath: {{$.Values.statefulset.container.workdir }}/events
-
-        - name: exts
-          mountPath: {{$.Values.statefulset.container.workdir }}/exts
-
-        - name: plugins
-          mountPath: {{$.Values.statefulset.container.workdir }}/plugins
-
-        - name: snapshots
-          mountPath: {{$.Values.statefulset.container.workdir }}/snapshots
-
+        volumeMounts:
+        {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
+        - name: {{$k}}
+          mountPath: {{$.Values.statefulset.container.workdir}}/{{$k}}
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
@@ -103,34 +105,15 @@ spec:
           subPath: recovery.json
         {{ end }}
         {{end}}
-        readinessProbe:
-          tcpSocket:
-            port: {{ $.Values.service.ports.gui }}
-          initialDelaySeconds: {{$.Values.statefulset.readiness.initialDelaySeconds}}
-          periodSeconds: {{$.Values.statefulset.readiness.periodSeconds}}
-          timeoutSeconds: {{$.Values.statefulset.readiness.timeoutSeconds}}
-          successThreshold: {{$.Values.statefulset.readiness.successThreshold}}
-          failureThreshold: {{$.Values.statefulset.readiness.failureThreshold}}
-        livenessProbe:
-          tcpSocket:
-            port: {{ $.Values.service.ports.gui }}
-          initialDelaySeconds: {{$.Values.statefulset.liveness.initialDelaySeconds}}
-          periodSeconds: {{$.Values.statefulset.liveness.periodSeconds}}
-          timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
-          successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
-          failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
 
       volumes:
-        {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
+         {{ if $v.enabled }}
         - name: {{ $k }}
-          {{ if $v.enabled }}
           persistentVolumeClaim: 
             claimName: {{ $k }}-{{$appName}}-{{ $counter }}-0
           {{ else }}
           emptyDir: {}
           {{ end }}
-        {{ end }}
-
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           secret:
@@ -150,6 +133,8 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
+        {{end}}
+
   {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
   {{ if $v.enabled }}
   volumeClaimTemplates:
@@ -163,7 +148,6 @@ spec:
         resources:
           requests:
             storage: {{ default $.Values.volumeClaimTemplates.defaults.storage $v.storage }}
-    {{ end }}
+  {{ end }}
   {{end}}
-
 {{ end }}
