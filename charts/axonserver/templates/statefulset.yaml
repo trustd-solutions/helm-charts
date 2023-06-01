@@ -117,7 +117,8 @@ spec:
           {{ else }}
           emptyDir: {}
           {{ end }}
-        {{end}}
+        {{ end }}
+
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           secret:
