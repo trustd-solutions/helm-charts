@@ -82,6 +82,7 @@ spec:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
           mountPath: {{$.Values.statefulset.container.workdir}}/{{$k}}
+        {{end}}
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
@@ -107,13 +108,15 @@ spec:
         {{end}}
 
       volumes:
-         {{ if $v.enabled }}
+        {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
+        {{ if $v.enabled }}
         - name: {{ $k }}
           persistentVolumeClaim: 
             claimName: {{ $k }}-{{$appName}}-{{ $counter }}-0
           {{ else }}
           emptyDir: {}
           {{ end }}
+        {{end}}
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
           secret:
@@ -132,7 +135,6 @@ spec:
           secret:
             secretName: axonserver-recovery-file
         {{ end }}
-        {{end}}
         {{end}}
 
   {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
