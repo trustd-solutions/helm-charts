@@ -63,7 +63,7 @@ spec:
         {{end}}
         volumeMounts:
         - name: logs
-          mountPath: {{$.Values.statefulset.container.workdir }}/log
+          mountPath: {{$.Values.statefulset.container.workdir }}/logs
         
         - name: data
           mountPath: {{$.Values.statefulset.container.workdir }}/data
