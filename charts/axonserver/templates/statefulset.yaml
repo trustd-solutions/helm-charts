@@ -61,48 +61,6 @@ spec:
         - name: AXONIQ_LICENSE
           value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
         {{end}}
-        volumeMounts:
-        - name: logs
-          mountPath: {{$.Values.statefulset.container.workdir }}/log
-        
-        - name: data
-          mountPath: {{$.Values.statefulset.container.workdir }}/data
-
-        - name: events
-          mountPath: {{$.Values.statefulset.container.workdir }}/events
-
-        - name: exts
-          mountPath: {{$.Values.statefulset.container.workdir }}/exts
-
-        - name: plugins
-          mountPath: {{$.Values.statefulset.container.workdir }}/plugins
-
-        - name: snapshots
-          mountPath: {{$.Values.statefulset.container.workdir }}/snapshots
-
-        {{if eq $.Values.app.platform "ee"}}  
-        - name: properties
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
-          subPath: axonserver.properties
-          readOnly: true
-        - name: cluster-template
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml
-          subPath: cluster-template.yaml
-          readOnly: true
-        - name: system-token
-          mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
-          subPath: axoniq.token
-          readOnly: true
-        - name: license
-          mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
-          subPath: axoniq.license
-          readOnly: true
-        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
-        - name: recovery-file
-          mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
-          subPath: recovery.json
-        {{ end }}
-        {{end}}
         readinessProbe:
           tcpSocket:
             port: {{ $.Values.service.ports.gui }}
@@ -119,6 +77,36 @@ spec:
           timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
           successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
+        
+        volumeMounts:
+          {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
+          - name: {{$k}}
+            mountPath: {{printf "%s/%s" $.Values.statefulset.container.workdir $k}}
+          {{end}}
+          {{if eq $.Values.app.platform "ee"}}  
+          - name: properties
+            mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
+            subPath: axonserver.properties
+            readOnly: true
+          - name: cluster-template
+            mountPath: {{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml
+            subPath: cluster-template.yaml
+            readOnly: true
+          - name: system-token
+            mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
+            subPath: axoniq.token
+            readOnly: true
+          - name: license
+            mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
+            subPath: axoniq.license
+            readOnly: true
+          {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
+          - name: recovery-file
+            mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
+            subPath: recovery.json
+            readOnly: true
+          {{ end }}
+          {{end}}
 
       volumes:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
@@ -150,6 +138,7 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
+
   {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
   {{ if $v.enabled }}
   volumeClaimTemplates:
@@ -163,7 +152,6 @@ spec:
         resources:
           requests:
             storage: {{ default $.Values.volumeClaimTemplates.defaults.storage $v.storage }}
-    {{ end }}
+  {{ end }}
   {{end}}
-
 {{ end }}
