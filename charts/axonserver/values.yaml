@@ -64,7 +64,7 @@ volumeClaimTemplates:
       #storageClassName: ""
       #accessModes: []
       #storage: ""
-    logs:
+    log:
       enabled: true
       #storageClassName: ""
       #accessModes: []
