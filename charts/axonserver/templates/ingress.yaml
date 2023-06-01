@@ -1,6 +1,12 @@
 {{- if .Values.ingress.enabled -}}
 ---
+{{ if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: networking.k8s.io/v1
+{{ else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: networking.k8s.io/v1beta1
+{{ else }}
 apiVersion: extensions/v1beta1
+{{ end }}
 kind: Ingress
 metadata:
   name: {{.Values.app.name}}
@@ -14,10 +20,18 @@ spec:
     http:
       paths:
       - path: /
+       {{ if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion }}      
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.app.name }}-gui
+            port:
+              number: {{ .Values.service.ports.gui }}
+        {{ else }}
         backend:
           serviceName: {{.Values.app.name}}-gui
           servicePort: gui
-
+        {{ end }}
   tls:
   - hosts:
     - {{ .Values.ingress.host }}
