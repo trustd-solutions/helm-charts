@@ -81,7 +81,7 @@ spec:
         volumeMounts:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
-          mountPath: "{{$.Values.statefulset.container.workdir}}/{{$k}}"
+          mountPath: {{printf "%s/%s" $.Values.statefulset.container.workdir $k}}
         {{end}}
         {{if eq $.Values.app.platform "ee"}}  
         - name: properties
@@ -104,6 +104,7 @@ spec:
         - name: recovery-file
           mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
           subPath: recovery.json
+          readOnly: true
         {{ end }}
         {{end}}
 
