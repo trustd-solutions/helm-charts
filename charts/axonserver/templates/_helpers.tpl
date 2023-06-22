@@ -69,7 +69,7 @@ axoniq:
       - roles:
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0
+          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
 {{- end }}
         name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
         contexts:
