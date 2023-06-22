@@ -2,6 +2,10 @@
 "{{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}"
 {{- end -}}
 
+{{- define "generateInternalToken" -}}
+"{{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}"
+{{- end -}}
+
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
 axoniq.axonserver.devmode.enabled={{ .Values.axoniq.axonserver.devmode.enabled }}
@@ -28,7 +32,7 @@ axoniq.axonserver.accesscontrol.enabled=true
 axoniq.axonserver.accesscontrol.systemtokenfile={{.Values.statefulset.container.workdir }}/security/axoniq.token
 #This the token used for the communication between axonserver nodes. This is not the System admin token.
 #https://docs.axoniq.io/reference-guide/axon-server/security/access-control-ee
-axoniq.axonserver.accesscontrol.internal-token={{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}
+axoniq.axonserver.accesscontrol.internal-token={{ include "generateInternalToken" . }}
 {{- end -}}
 
 {{/* Expand 'cluster-template.yaml' */}}
@@ -54,7 +58,7 @@ axoniq:
       - roles:
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0
+          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
 {{- end }}
         name: _admin
         contexts:
