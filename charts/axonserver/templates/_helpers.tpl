@@ -2,6 +2,10 @@
 "{{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}"
 {{- end -}}
 
+{{- define "generateInternalToken" -}}
+"{{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}"
+{{- end -}}
+
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
 axoniq.axonserver.devmode.enabled={{ .Values.axoniq.axonserver.devmode.enabled }}
@@ -9,7 +13,6 @@ axoniq.axonserver.event.storage={{.Values.statefulset.container.workdir }}/event
 axoniq.axonserver.snapshot.storage={{.Values.statefulset.container.workdir }}/snapshots
 axoniq.axonserver.replication.log-storage-folder={{.Values.statefulset.container.workdir }}/log
 axoniq.axonserver.controldb-path={{.Values.statefulset.container.workdir }}/data
-
 axoniq.axonserver.pid-file-location={{.Values.statefulset.container.workdir }}/data
 
 logging.file={{.Values.statefulset.container.workdir }}/log/axonserver.log
@@ -17,19 +20,19 @@ logging.file.max-history={{ .Values.axoniq.axonserver.properties.logging.maxHist
 logging.file.max-size={{ .Values.axoniq.axonserver.properties.logging.maxSize | default "10MB"}}
 
 axoniq.axonserver.clustertemplate.path={{.Values.statefulset.container.workdir }}/config/cluster-template.yaml
-axoniq.axonserver.domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
-axoniq.axonserver.internal-domain={{.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
-axoniq.axonserver.accesscontrol.enabled=true
-axoniq.axonserver.accesscontrol.systemtokenfile={{.Values.statefulset.container.workdir }}/security/axoniq.token
+
+axoniq.axonserver.domain={{$.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
+axoniq.axonserver.internal-domain={{$.Values.app.name}}-svc.{{ .Release.Namespace }}.svc.cluster.local
 axoniq.axonserver.port={{.Values.service.ports.grpc}}
 axoniq.axonserver.server.port={{.Values.service.ports.gui}}
-# axoniq.axonserver.internal-port=8224
-
-#  This the token used for the communication between axonserver nodes. This is not the System admin token.
-#  https://docs.axoniq.io/reference-guide/axon-server/security/access-control-ee
-axoniq.axonserver.accesscontrol.internal-token={{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}
-
+#axoniq.axonserver.internal-port=8224
 axoniq.axonserver.heartbeat.enabled=true
+
+axoniq.axonserver.accesscontrol.enabled=true
+axoniq.axonserver.accesscontrol.systemtokenfile={{.Values.statefulset.container.workdir }}/security/axoniq.token
+#This the token used for the communication between axonserver nodes. This is not the System admin token.
+#https://docs.axoniq.io/reference-guide/axon-server/security/access-control-ee
+axoniq.axonserver.accesscontrol.internal-token={{ include "generateInternalToken" . }}
 {{- end -}}
 
 {{/* Expand 'cluster-template.yaml' */}}
@@ -55,7 +58,7 @@ axoniq:
       - roles:
 {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0
+          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
 {{- end }}
         name: _admin
         contexts:

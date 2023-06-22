@@ -154,23 +154,3 @@ spec:
             storage: {{ default $.Values.volumeClaimTemplates.defaults.storage $v.storage }}
     {{ end }}
   {{end}}
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{$appName}}-{{ $counter }}
-  labels:
-    sts: {{$appName}}-{{ $counter }}
-spec:
-  ports:
-  - name: client-grpc
-    port: 8124
-    targetPort: 8124
-  - name: internal-grpc
-    port: 8224
-    targetPort: 8224
-  clusterIP: None
-  selector:
-    sts: {{$appName}}-{{ $counter }}
-{{ end }}
