@@ -11,7 +11,7 @@ metadata:
     sts: {{$appName}}-{{$counter}}
 spec:
   podManagementPolicy: {{$.Values.statefulset.podManagementPolicy}}
-  serviceName: {{$appName}}-svc
+  serviceName: {{$appName}}-{{ $counter }}
   updateStrategy:
     type: {{ $.Values.statefulset.updateStrategy.type }}
   replicas: 1
@@ -165,8 +165,8 @@ metadata:
 spec:
   ports:
   - name: client-grpc
-    port: 8124
-    targetPort: 8124
+    port: {{ .Values.service.ports.grpc }}
+    targetPort: {{ .Values.service.ports.grpc }}
   - name: internal-grpc
     port: 8224
     targetPort: 8224

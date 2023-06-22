@@ -24,7 +24,7 @@ metadata:
     app: {{.Values.app.name}}
 spec:
   ports:
-  - name: grpc
+  - name: client-grpc
     port: {{ .Values.service.ports.grpc }}
     targetPort: {{ .Values.service.ports.grpc }}
   - name: internal-grpc
