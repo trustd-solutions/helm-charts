@@ -102,6 +102,11 @@ spec:
           mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
+        {{ if $.Values.axoniq.axonserver.logbackBase64 }}
+        - name: logback
+          mountPath: {{$.Values.statefulset.container.workdir }}/config/logback.xml
+          subPath: logback.xml
+        {{ end }}
         {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
         - name: recovery-file
           mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
@@ -133,6 +138,11 @@ spec:
         - name: license
           secret:
             secretName: axonserver-license
+        {{ if $.Values.axoniq.axonserver.logbackBase64}}
+        - name: logback
+          secret:
+            secretName: axonserver-logback
+        {{ end }}
         {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
         - name: recovery-file
           secret:
