@@ -117,12 +117,8 @@ spec:
       volumes:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{ $k }}
-          {{ if $v.enabled }}
           persistentVolumeClaim:
             claimName: {{ $k }}-{{$appName}}-{{ $counter }}-0
-          {{ else }}
-          emptyDir: {}
-          {{ end }}
         {{ end }}
 
         {{if eq $.Values.app.platform "ee"}}
@@ -152,18 +148,15 @@ spec:
   {{ if $.Values.volumeClaimTemplates.templates }}
   volumeClaimTemplates:
   {{ end }}
-  {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
-  {{ if $v.enabled }}
+  {{range $k, $v := $.Values.volumeClaimTemplates.templates }}
     - metadata:
         namespace: {{ $.Release.Namespace }}
         name: {{ $k }}
       spec:
-        accessModes:
-          {{ default $.Values.volumeClaimTemplates.defaults.accessModes $v.accessModes | toYaml | nindent 10 }}
-        storageClassName: {{ default $.Values.volumeClaimTemplates.defaults.storageClassName $v.storageClassName }}
+        accessModes: {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
+        storageClassName: {{ $v.storageClassName | default $.Values.volumeClaimTemplates.defaults.storageClassName }}
         resources:
           requests:
-            storage: {{ default $.Values.volumeClaimTemplates.defaults.storage $v.storage }}
-    {{ end }}
+            storage: {{ $v.storage | default $.Values.volumeClaimTemplates.defaults.storage }}
   {{end}}
 {{ end }}
