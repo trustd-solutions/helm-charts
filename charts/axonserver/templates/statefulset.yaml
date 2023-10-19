@@ -149,7 +149,9 @@ spec:
             secretName: axonserver-recovery-file
         {{ end }}
         {{end}}
+  {{ if $.Values.volumeClaimTemplates.templates }}
   volumeClaimTemplates:
+  {{ end }}
   {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
   {{ if $v.enabled }}
     - metadata:
