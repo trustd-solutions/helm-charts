@@ -44,41 +44,41 @@ aws:
 
 volumeClaimTemplates:
   defaults:
-    storageClassName: gp2-retain
+    storageClassName: ""
     accessModes:
     - ReadWriteOnce
     storage: 5Gi
-  templates:
-    - data:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
-    - events:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
-    - exts:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
-    - log:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
-    - plugins:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
-    - snapshots:
-        enabled: true
-        #storageClassName: ""
-        #accessModes: []
-        #storage: ""
+  templates: {}
+    # data:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
+    # events:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
+    # exts:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
+    # log:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
+    # plugins:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
+    # snapshots:
+    #   storageClassName: ""
+    #   accessModes:
+    #   - ReadAndWriteOnce
+    #   storage: 5Gi
 
 axoniq:
   axonserver:
