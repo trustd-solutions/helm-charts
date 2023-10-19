@@ -49,36 +49,36 @@ volumeClaimTemplates:
     - ReadWriteOnce
     storage: 5Gi
   templates:
-    data:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
-    events:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
-    exts:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
-    log:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
-    plugins:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
-    snapshots:
-      enabled: true
-      #storageClassName: ""
-      #accessModes: []
-      #storage: ""
+    - data:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
+    - events:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
+    - exts:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
+    - log:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
+    - plugins:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
+    - snapshots:
+        enabled: true
+        #storageClassName: ""
+        #accessModes: []
+        #storage: ""
 
 axoniq:
   axonserver:
