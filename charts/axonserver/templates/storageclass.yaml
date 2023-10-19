@@ -1,0 +1,28 @@
+{{ range untilStep 0 (int .Values.statefulset.count) 1 }}
+{{ $counter := . }}
+{{ $appName := $.Values.app.name }}
+
+{{ if $.Values.volumeClaimTemplates.templates }}
+{{ if $.Values.aws.azs }}
+{{ with index $.Values.aws.azs $counter }}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ $appName }}-{{ $.Release.Namespace }}-{{ . }}
+provisioner: ebs.csi.aws.com
+parameters:
+  fsType: ext4
+  type: gp2
+  encrypted: "true"
+reclaimPolicy: Retain
+allowVolumeExpansion: "true"
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.kubernetes.io/zone
+    values:
+    - {{ . }}
+{{ end }}
+{{ end }}
+{{ end }}
+{{ end }}
