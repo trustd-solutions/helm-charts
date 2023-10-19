@@ -41,6 +41,32 @@ axoniq:
   {{.Values.app.name}}:
     cluster-template:
       first: {{$.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
+      replicationGroups:
+      - name: _admin
+        roles:
+        {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
+        - role: PRIMARY
+          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+        {{- end }}
+        contexts:
+        - name: _admin
+          metaData:
+            event.index-format: JUMP_SKIP_INDEX
+            snapshot.index-format: JUMP_SKIP_INDEX 
+      - name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
+        roles:
+        {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
+        - role: PRIMARY
+          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+        {{- end }}
+        contexts:
+        - name: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
+          metaData:
+            event.index-format: JUMP_SKIP_INDEX
+            snapshot.index-format: JUMP_SKIP_INDEX
+      
+      applications: []
+      
       users:
       - roles:
         - context: _admin
@@ -53,29 +79,4 @@ axoniq:
           - ADMIN
         password: '{{.Values.axoniq.axonserver.admin.password}}'
         userName: '{{.Values.axoniq.axonserver.admin.userName}}'
-
-      replicationGroups:
-      - roles:
-{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
-        - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
-{{- end }}
-        name: _admin
-        contexts:
-        - name: _admin
-          metaData:
-            event.index-format: JUMP_SKIP_INDEX
-            snapshot.index-format: JUMP_SKIP_INDEX
-      - roles:
-{{- range untilStep 0 (int .Values.statefulset.count) 1 }}
-        - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
-{{- end }}
-        name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
-        contexts:
-        - name: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
-          metaData:
-            event.index-format: JUMP_SKIP_INDEX
-            snapshot.index-format: JUMP_SKIP_INDEX
-        applications: []
 {{- end -}}
