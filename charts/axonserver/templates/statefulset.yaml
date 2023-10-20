@@ -154,21 +154,15 @@ spec:
         name: {{ $k }}
       spec:
         accessModes: {{ $v.accessModes | default $.Values.volumeClaimTemplates.defaults.accessModes | toYaml | nindent 10 }}
+        {{ if $.Values.aws.azs }}
+        {{ with index $.Values.aws.azs $counter }}
+        storageClassName: {{ $appName }}-{{ $.Release.Namespace }}-{{ . }}
+        {{ end }}
+        {{ else }}
         storageClassName: {{ $v.storageClassName | default $.Values.volumeClaimTemplates.defaults.storageClassName }}
+        {{ end }}
         resources:
           requests:
             storage: {{ $v.storage | default $.Values.volumeClaimTemplates.defaults.storage }}
-          {{ if $.Values.aws.azs }}
-          {{ with index $.Values.aws.azs $counter }}
-          nodeAffinity:
-            required:
-              nodeSelectorTerms:
-              - matchExpressions:
-                - key: topology.kubernetes.io/zone
-                  operator: In
-                  values:
-                  - {{ . }}
-          {{ end }}
-          {{ end }}
   {{end}}
 {{ end }}
