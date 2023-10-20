@@ -53,15 +53,15 @@ axoniq:
           metaData:
             event.index-format: JUMP_SKIP_INDEX
             snapshot.index-format: JUMP_SKIP_INDEX 
-      - name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName | default "default" }}
+
+      - name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName }}
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
           node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
         {{- end }}
-
         contexts:
-        - name: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
+        - name: {{ .Values.axoniq.axonserver.defaultContextName }}
           metaData:
             event.index-format: JUMP_SKIP_INDEX
             snapshot.index-format: JUMP_SKIP_INDEX
@@ -69,15 +69,15 @@ axoniq:
       applications: []
       
       users:
-      - roles:
+      - password: '{{.Values.axoniq.axonserver.admin.password}}'
+        userName: '{{.Values.axoniq.axonserver.admin.userName}}'
+        roles:
         - context: _admin
           roles:
           - ADMIN
-        - context: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
+        - context: {{ .Values.axoniq.axonserver.defaultContextName }}
           roles:
           - CONTEXT_ADMIN
           - USE_CONTEXT
           - ADMIN
-        password: '{{.Values.axoniq.axonserver.admin.password}}'
-        userName: '{{.Values.axoniq.axonserver.admin.userName}}'
 {{- end -}}
