@@ -14,9 +14,9 @@ provisioner: ebs.csi.aws.com
 parameters:
   fsType: ext4
   type: gp2
-  encrypted: true
+  encrypted: "true"
 reclaimPolicy: Retain
-allowVolumeExpansion: true
+allowVolumeExpansion: "true"
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.kubernetes.io/zone
