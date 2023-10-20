@@ -59,6 +59,7 @@ axoniq:
         - role: PRIMARY
           node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
         {{- end }}
+
         contexts:
         - name: {{ .Values.axoniq.axonserver.defaultContextName | default "default" }}
           metaData:
