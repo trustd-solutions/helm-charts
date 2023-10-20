@@ -158,5 +158,17 @@ spec:
         resources:
           requests:
             storage: {{ $v.storage | default $.Values.volumeClaimTemplates.defaults.storage }}
+          {{ if $.Values.aws.azs }}
+          {{ with index $.Values.aws.azs $counter }}
+          nodeAffinity:
+            required:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: topology.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - {{ . }}
+          {{ end }}
+          {{ end }}
   {{end}}
 {{ end }}
