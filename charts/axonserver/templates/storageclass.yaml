@@ -16,7 +16,7 @@ parameters:
   type: gp2
   encrypted: "true"
 reclaimPolicy: Retain
-allowVolumeExpansion: "true"
+allowVolumeExpansion: true
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.kubernetes.io/zone
