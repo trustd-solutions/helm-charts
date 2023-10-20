@@ -53,6 +53,7 @@ axoniq:
           metaData:
             event.index-format: JUMP_SKIP_INDEX
             snapshot.index-format: JUMP_SKIP_INDEX 
+
       - name: {{ .Values.axoniq.axonserver.defaultReplicationGroupName }}
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
