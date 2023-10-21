@@ -39,7 +39,7 @@ spec:
       initContainers:
       - name: init-cluster
         image: {{$.Values.statefulset.container.image}}
-        command: ['sh', '-c', 'java -jar ./axonserver-cli init-cluster -c {{ $.Values.axoniq.axonserver.defaultContextName }}']
+        command: ['sh', '-c', 'java -jar ./axonserver-cli init-cluster -c {{ $.Values.axoniq.axonserver.defaultContextName }} -t $(cat security/axoniq.token)']
         volumeMounts:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
