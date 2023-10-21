@@ -40,13 +40,13 @@ axoniq.axonserver.accesscontrol.internal-token={{ include "generateInternalToken
 axoniq:
   {{.Values.app.name}}:
     cluster-template:
-      first: {{$.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
+      first: {{.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
       replicationGroups:
       - name: _admin
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+          node: {{$.Values.app.name}}-{{ . }}-0
         {{- end }}
         contexts:
         - name: _admin
@@ -58,7 +58,7 @@ axoniq:
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+          node: {{$.Values.app.name}}-{{ . }}-0
         {{- end }}
         contexts:
         - name: {{ .Values.axoniq.axonserver.defaultContextName }}
