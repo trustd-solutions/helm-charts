@@ -36,43 +36,6 @@ spec:
       {{ else }}
         {{- toYaml $.Values.nodeSelector | indent 2 }}
       {{ end }}
-      initContainers:
-      - name: init-cluster
-        image: {{$.Values.statefulset.container.image}}
-        command: ['sh', '-c', 'java -jar ./axonserver-cli.jar init-cluster -c {{ $.Values.axoniq.axonserver.defaultContextName }} -t $(cat security/axoniq.token)']
-        volumeMounts:
-        {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
-        - name: {{$k}}
-          mountPath: {{ printf "%s/%s" $.Values.statefulset.container.workdir $k }}
-        {{end}}
-        {{if eq $.Values.app.platform "ee"}}
-        - name: properties
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/axonserver.properties
-          subPath: axonserver.properties
-          readOnly: true
-        - name: cluster-template
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/cluster-template.yaml
-          subPath: cluster-template.yaml
-          readOnly: true
-        - name: system-token
-          mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
-          subPath: axoniq.token
-          readOnly: true
-        - name: license
-          mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
-          subPath: axoniq.license
-          readOnly: true
-        {{ if $.Values.axoniq.axonserver.logbackBase64 }}
-        - name: logback
-          mountPath: {{$.Values.statefulset.container.workdir }}/config/logback.xml
-          subPath: logback.xml
-        {{ end }}
-        {{ if $.Values.axoniq.axonserver.recoveryFileBase64 }}
-        - name: recovery-file
-          mountPath: {{$.Values.statefulset.container.workdir }}/recovery.json
-          subPath: recovery.json
-        {{ end }}
-        {{end}}
       containers:
       - name: {{$appName}}
         image: {{$.Values.statefulset.container.image}}
