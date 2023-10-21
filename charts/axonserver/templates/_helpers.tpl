@@ -40,7 +40,7 @@ axoniq.axonserver.accesscontrol.internal-token={{ include "generateInternalToken
 axoniq:
   {{.Values.app.name}}:
     cluster-template:
-      first: {{$.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
+      first: {{.Values.app.name}}-0-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local:8224
       replicationGroups:
       - name: _admin
         roles:
