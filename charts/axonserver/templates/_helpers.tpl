@@ -46,7 +46,7 @@ axoniq:
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+          node: {{$.Values.app.name}}-{{ . }}-0
         {{- end }}
         contexts:
         - name: _admin
@@ -58,7 +58,7 @@ axoniq:
         roles:
         {{- range untilStep 0 (int .Values.statefulset.count) 1 }}
         - role: PRIMARY
-          node: {{$.Values.app.name}}-{{ . }}-0.{{$.Values.app.name}}-svc.{{ $.Release.Namespace }}.svc.cluster.local
+          node: {{$.Values.app.name}}-{{ . }}-0
         {{- end }}
         contexts:
         - name: {{ .Values.axoniq.axonserver.defaultContextName }}
