@@ -39,7 +39,7 @@ spec:
       initContainers:
       - name: init-cluster
         image: {{$.Values.statefulset.container.image}}
-        command: ["java -jar ./axonserver-cli init-cluster -c {{ $.Values.axoniq.axonserver.defaultContextName }}"]
+        command: ['sh', '-c', 'java -jar ./axonserver-cli init-cluster -c {{ $.Values.axoniq.axonserver.defaultContextName }}']
         volumeMounts:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
@@ -116,7 +116,7 @@ spec:
           timeoutSeconds: {{$.Values.statefulset.liveness.timeoutSeconds}}
           successThreshold: {{$.Values.statefulset.liveness.successThreshold}}
           failureThreshold: {{$.Values.statefulset.liveness.failureThreshold}}
-
+        
         volumeMounts:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{$k}}
@@ -150,7 +150,7 @@ spec:
           subPath: recovery.json
         {{ end }}
         {{end}}
-
+      
       volumes:
         {{range $k, $v := $.Values.volumeClaimTemplates.templates}}
         - name: {{ $k }}
