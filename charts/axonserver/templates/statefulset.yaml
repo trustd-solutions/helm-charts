@@ -29,12 +29,13 @@ spec:
         runAsUser: 1001
         fsGroup: 1001
       nodeSelector:
+      {{ if $.Values.nodeSelector }}
+        {{- toYaml $.Values.nodeSelector | indent 8 }}
+      {{ end }}
       {{ if $.Values.aws.azs }}
         {{ with index $.Values.aws.azs $counter }}
         topology.kubernetes.io/zone: {{ . }}
         {{ end }}
-      {{ else }}
-        {{- toYaml $.Values.nodeSelector | indent 2 }}
       {{ end }}
       containers:
       - name: {{$appName}}
