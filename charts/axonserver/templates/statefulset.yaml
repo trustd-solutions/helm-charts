@@ -123,6 +123,48 @@ spec:
         {{ end }}
 
         {{if eq $.Values.app.platform "ee"}}
+        {{- if $.Values.externalSecret.enabled }}
+        - name: properties
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: axonserver.properties
+              path: axonserver.properties
+        - name: cluster-template
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: cluster-template.yaml
+              path: cluster-template.yaml
+        - name: system-token
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: axoniq.token
+              path: axoniq.token
+        - name: license
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: axoniq.license
+              path: axoniq.license
+        {{- if $.Values.externalSecret.remoteRef.logback }}
+        - name: logback
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: logback.xml
+              path: logback.xml
+        {{- end }}
+        {{- if $.Values.externalSecret.remoteRef.recoveryFile }}
+        - name: recovery-file
+          secret:
+            secretName: axonserver-secrets
+            items:
+            - key: recovery.json
+              path: recovery.json
+        {{- end }}
+        {{- else }}
         - name: properties
           secret:
             secretName: axonserver-properties
@@ -145,6 +187,7 @@ spec:
           secret:
             secretName: axonserver-recovery-file
         {{ end }}
+        {{- end }}
         {{end}}
   {{ if $.Values.volumeClaimTemplates.templates }}
   volumeClaimTemplates:
