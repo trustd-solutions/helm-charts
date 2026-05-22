@@ -9,7 +9,7 @@ statefulset:
     type: OnDelete
   count: 3
   container:
-    image: axoniq/axonserver-enterprise:4.6.5-jdk-11-dev
+    image: axoniq/axonserver:2024.2.22-jdk-17-nonroot
     workdir: /axonserver
     pullPolicy: Always
 
@@ -112,3 +112,15 @@ ingress:
   host: ""
   annotations: {}
   tls_secret: axonserver-tls
+
+externalSecret:
+  enabled: false
+  clusterSecretStore: ""
+  refreshInterval: 1h
+  remoteRef:
+    license: ""
+    systemToken: ""
+    properties: ""
+    clusterTemplate: ""
+    logback: ""
+    recoveryFile: ""
