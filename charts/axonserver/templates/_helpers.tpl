@@ -6,6 +6,11 @@
 "{{randAlphaNum 8 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 4 }}-{{ randAlphaNum 12}}"
 {{- end -}}
 
+{{/* Resolve the licensing mode (defaults to "file") */}}
+{{- define "axonserver.licensing.mode" -}}
+{{- default "file" .Values.axoniq.axonserver.licensing.mode -}}
+{{- end -}}
+
 {{/* Expand 'axonserver.properties' */}}
 {{- define "axonserver-properties" -}}
 axoniq.axonserver.devmode.enabled={{ .Values.axoniq.axonserver.devmode.enabled }}

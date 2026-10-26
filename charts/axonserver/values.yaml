@@ -100,6 +100,16 @@ axoniq:
     propertiesBase64: ""
     clusterTemplateBase64: ""
     recoveryFileBase64: ""
+    licensing:
+      # mode: file | platform
+      #   file     - mount a license file (licenseBase64) via the axonserver-license Secret
+      #   platform - authenticate against Axoniq Platform (no license file required)
+      mode: file
+      platform:
+        # "<environment-id>:<secret>" value used to authenticate against Axoniq Platform
+        authentication: ""
+        # Environment variable name Axon Server reads for Platform authentication
+        authenticationEnvVar: axoniq_platform_authentication
 
 service:
   ports:

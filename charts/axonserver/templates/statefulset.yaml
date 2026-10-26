@@ -57,12 +57,23 @@ spec:
           protocol: TCP
         {{if eq $.Values.app.platform "ee"}}
         env:
-        {{ range $.Values.statefulset.env }}
-        - name: {{ .name }}
-          value: {{ .value }}
-        {{ end }}
+        {{- with $.Values.statefulset.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- $licensing := $.Values.axoniq.axonserver.licensing }}
+        {{- $mode := include "axonserver.licensing.mode" $ }}
+        {{- if eq $mode "file" }}
         - name: AXONIQ_LICENSE
-          value: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
+          value: {{ printf "%s/license/axoniq.license" $.Values.statefulset.container.workdir | quote }}
+        {{- else if eq $mode "platform" }}
+        - name: {{ required "axoniq.axonserver.licensing.platform.authenticationEnvVar is required when mode is platform" $licensing.platform.authenticationEnvVar | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: axonserver-platform-credentials
+              key: authentication
+        {{- else }}
+        {{- fail (printf "axoniq.axonserver.licensing.mode must be 'file' or 'platform', got %q" $mode) }}
+        {{- end }}
         {{end}}
         readinessProbe:
           tcpSocket:
@@ -99,10 +110,12 @@ spec:
           mountPath: {{$.Values.statefulset.container.workdir }}/security/axoniq.token
           subPath: axoniq.token
           readOnly: true
+        {{ if eq (include "axonserver.licensing.mode" $) "file" }}
         - name: license
           mountPath: {{$.Values.statefulset.container.workdir }}/license/axoniq.license
           subPath: axoniq.license
           readOnly: true
+        {{ end }}
         {{ if $.Values.axoniq.axonserver.logbackBase64 }}
         - name: logback
           mountPath: {{$.Values.statefulset.container.workdir }}/config/logback.xml
@@ -132,9 +145,11 @@ spec:
         - name: system-token
           secret:
             secretName: axonserver-system-token
+        {{ if eq (include "axonserver.licensing.mode" $) "file" }}
         - name: license
           secret:
             secretName: axonserver-license
+        {{ end }}
         {{ if $.Values.axoniq.axonserver.logbackBase64}}
         - name: logback
           secret:
